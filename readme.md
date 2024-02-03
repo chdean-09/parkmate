@@ -1,0 +1,2 @@
+# Welcome to ParkMate
+ParkMate simplifies your parking experience with a user-friendly app. Quickly locate available parking spots, reserve in advance, and set your preferred parking duration. Our app calculates payments based on location and time, ensuring transparency. ParkMate provides digital receipts, making your parking transactions convenient and organized. Say goodbye to parking hassles – ParkMate is your reliable companion for stress-free parking.
