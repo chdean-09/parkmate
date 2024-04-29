@@ -16,5 +16,10 @@ async function test() {
 export default async function UsePage() {
   const data = await test();
 
-  return <h1>hello world, number is {data.number}</h1>;
+  return (
+    <h1>
+      hello world, number is {data.number}
+      <p id="selenium-test">haii selenium</p>
+    </h1>
+  );
 }
