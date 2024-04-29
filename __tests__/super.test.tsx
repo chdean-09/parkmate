@@ -2,15 +2,22 @@
  * @jest-environment node
  */
 
-import { GET } from "@/app/api/test/[testnum]/route";
+import { testApiHandler } from "next-test-api-route-handler";
+import * as appHandler from "@/app/api/test/[testnum]/route";
 
 describe("tests the nextjs route handler", () => {
   it("should show the number", async () => {
-    const res = await GET({} as Request, { params: { testnum: 35345353 } });
-    const body = await res.json();
+    await testApiHandler({
+      params: { testnum: "534543" },
+      appHandler,
+      async test({ fetch }) {
+        const response = await fetch({ method: "GET" });
+        const data = await response.json();
 
-    expect(res.status).toBe(200);
-    expect(body.number).toBe(35345353);
-    expect(body.message).toBe("Success test");
+        expect(response.status).toBe(200);
+        expect(data.number).toBe("534543");
+        expect(data.message).toBe("Success test");
+      },
+    });
   });
 });
