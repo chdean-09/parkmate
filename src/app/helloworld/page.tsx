@@ -1,20 +1,25 @@
-"use client";
+async function test() {
+  const res = await fetch("http://localhost:3000/api/test/35345353", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 
-import React from "react";
-import { useState, useEffect } from "react";
+  if (!res.ok) {
+    throw new Error("Failed to fetch data");
+  }
 
-export default function usePage() {
-  const [test, setTest] = useState("");
-  useEffect(() => {
-    fetch("/api/test/35345353 ", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((results) => setTest(results.number));
-  }, []);
+  return await res.json();
+}
 
-  return <div>hello world, number is {test}</div>;
+export default async function UsePage() {
+  const data = await test();
+
+  return (
+    <h1>
+      hello world, number is {data.number}
+      <p id="selenium-test">haii selenium</p>
+    </h1>
+  );
 }
