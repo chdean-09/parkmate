@@ -1,7 +1,7 @@
 "use client";
 import "gridstack/dist/gridstack.min.css";
 import { GridStack, GridStackNode } from "gridstack";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 
 export default function CustomParkingGrid({ num }: { num: number }) {
   useEffect(() => {

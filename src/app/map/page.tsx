@@ -91,7 +91,7 @@ export default function Map() {
       {clickedPosition && (
         <Dialog>
           <DialogTrigger asChild>
-            <MarkerF
+            <Marker
               position={clickedPosition}
               animation={google.maps.Animation.DROP}
               zIndex={50}

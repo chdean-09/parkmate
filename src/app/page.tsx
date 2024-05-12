@@ -1,9 +1,16 @@
-import Image from "next/image";
+import { validateRequest } from "@/lib/auth";
+import { redirect } from "next/navigation";
+import LogoutForm from "@/components/custom/logoutForm";
 
-export default function Home() {
+export default async function Home() {
+  const { user } = await validateRequest();
+  if (!user) {
+    return redirect("/login");
+  }
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      login signup here, if signed in, redirect to /home
+      <LogoutForm user={user} />
     </main>
   );
 }
