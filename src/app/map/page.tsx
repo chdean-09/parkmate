@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import CustomParkingGrid from "@/components/custom/parkingGrid";
 
 const containerStyle = {
   width: "800px",
@@ -40,6 +41,7 @@ export default function Map() {
   const [map, setMap] = useState(null);
   const [clickedPosition, setClickedPosition] =
     useState<null | google.maps.LatLngLiteral>(null);
+  const [slotNum, setSlotNum] = useState(0);
 
   const onLoad = useCallback(function callback(map) {
     // This is just an example of getting and using the map instance!!! don't just blindly copy!
@@ -124,6 +126,20 @@ export default function Map() {
                 </Label>
                 <Input id="rate" defaultValue="0" className="col-span-3" />
               </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="slot-num" className="text-right">
+                  parking slots
+                </Label>
+                <Input
+                  id="slot-num"
+                  defaultValue="0"
+                  className="col-span-3"
+                  onChange={(event) => setSlotNum(Number(event.target.value))}
+                />
+              </div>
+              <div className="grid items-center border border-black">
+                <CustomParkingGrid num={slotNum} />
+              </div>
             </div>
             <DialogFooter>
               <DialogClose asChild>
@@ -137,4 +153,5 @@ export default function Map() {
   ) : (
     <></>
   );
+  // return <CustomParkingGrid />
 }
