@@ -1,18 +1,24 @@
+import { validateRequest } from "@/lib/auth";
+import { redirect } from "next/navigation";
 import { signup } from "@/lib/signup";
+import Link from "next/link";
+import SignupForm from "@/components/custom/signUpForm";
 
-export default async function SignUpForm() {
+export default async function Signup() {
+  const { user } = await validateRequest();
+  if (user) {
+    redirect("/home");
+  }
+
   return (
-    <>
-      <h1>Create an account</h1>
-      <form action={signup}>
-        <label htmlFor="username">Username</label>
-        <input name="username" id="username" />
-        <br />
-        <label htmlFor="password">Password</label>
-        <input type="password" name="password" id="password" />
-        <br />
-        <button>Continue</button>
-      </form>
-    </>
+    <div className="p-5 flex flex-col h-screen items-center justify-center w-screen">
+      <SignupForm signUp={signup} />
+      <h1>
+        Already have an account?{" "}
+        <Link href="/login" className="underline">
+          Log in now!
+        </Link>
+      </h1>
+    </div>
   );
 }

@@ -1,3 +1,4 @@
+import PayPalPayment from "@/components/custom/paypal/Payment";
 import { validateRequest } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import LogoutForm from "@/components/custom/logoutForm";
