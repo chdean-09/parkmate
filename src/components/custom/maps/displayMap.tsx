@@ -7,7 +7,7 @@ interface GoogleMapData {
 }
 
 interface DisplayMapDetailsProps {
-  mapData: GoogleMapData;
+  mapData: GoogleMapData[];
   parkingSlot: number;
   className?: string;
 }
@@ -18,24 +18,29 @@ const DisplayMapDetails = ({
   className = "w-full h-[477px] md:w-3/4 md:h-[600px] lg:w-[900px]",
 }: DisplayMapDetailsProps) => {
   return (
-    <div className={`border ${className} flex flex-col`}>
-      <div className="flex-grow bg-amber-50">Maps Here</div>
-      <div className="flex-shrink-0 bg-zinc-300 p-4">
-        <p className="text-sm">{mapData?.parkingSpotName}</p>
-        <div className="text-lg font-semibold">{`Availability: ${parkingSlot} spots`}</div>
-      </div>
-    </div>
+    <>
+      {mapData.map((data: GoogleMapData) => (
+        <div
+          key={data.location}
+          className={`border ${className} flex flex-col`}
+        >
+          <div className="flex-grow bg-amber-50">Maps Here</div>
+          <div className="flex-shrink-0 bg-zinc-300 p-4">
+            <p className="text-sm">{data?.parkingSpotName}</p>
+            <div className="text-lg font-semibold">{`Availability: ${parkingSlot} spots`}</div>
+          </div>
+        </div>
+      ))}
+    </>
   );
 };
 
 export default DisplayMapDetails;
 
-{
-  /* <div className="w-full h-[432px] border flex flex-col">
+/* <div className="w-full h-[432px] border flex flex-col">
   <div className="flex-grow bg-amber-50">Maps Here</div>
   <div className="flex-shrink-0 bg-zinc-300 p-4">
     <p className="text-sm">{mapData?.parkingSpotName}</p>
     <div className="text-lg font-semibold">{`Availability: ${parkingSlot} spots`}</div>
   </div>
 </div>; */
-}
