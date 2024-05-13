@@ -12,13 +12,20 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
+    "@lucia-auth/adapter-prisma": "^4.0.1",
+    "@prisma/client": "^5.13.0",
     "@radix-ui/react-dialog": "^1.0.5",
+    "@radix-ui/react-label": "^2.0.2",
+    "@radix-ui/react-slot": "^1.0.2",
+    "@react-google-maps/api": "^2.19.3",
     "chromedriver": "^124.0.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "geckodriver": "^4.4.0",
+    "lucia": "^3.2.0",
+    "gridstack": "^10.1.2",
     "lucide-react": "^0.376.0",
-    "next": "14.1.0",
+    "next": "^14.2.3",
     "react": "^18",
     "react-dom": "^18",
     "selenium-webdriver": "^4.20.0",
@@ -44,7 +51,9 @@
     "next-test-api-route-handler": "^4.0.7",
     "postcss": "^8",
     "prettier": "^3.2.5",
+    "prisma": "^5.13.0",
     "tailwindcss": "^3.3.0",
+    "ts-node": "^10.9.2",
     "typescript": "^5"
   },
   "lint-staged": {
