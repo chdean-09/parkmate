@@ -40,6 +40,7 @@ model ParkingLocation {
   latitude     Float
   longitude    Float
   name         String
+  baseRate     Float
   hourlyRate   Float
   parkingSlots ParkingSlot[]
   owner        User          @relation(fields: [ownerId], references: [id])
