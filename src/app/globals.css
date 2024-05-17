@@ -66,6 +66,17 @@
   }
 }
 
+.grid-stack {
+  background: #767676;
+}
+
+.grid-stack-item-content {
+  text-align: center;
+  border: 2px;
+  border-color: white;
+  border-style: dotted solid none solid;
+}
+
 @layer base {
   * {
     @apply border-border;
