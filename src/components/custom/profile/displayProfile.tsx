@@ -3,16 +3,7 @@ import { Separator } from "@/components/ui/separator";
 import { buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
 
-type Props = {
-  user: {
-    username: string;
-    ownedLocations: any; // edit later
-    occupiedSlots: any; // edit later
-    id: string;
-  };
-};
-
-function DisplayProfile({ user }: Props) {
+function DisplayProfile({ user }: UserProps) {
   const { username, ownedLocations, occupiedSlots } = user;
 
   const balance = 1000;
@@ -66,9 +57,9 @@ function DisplayProfile({ user }: Props) {
         {/* E-Wallet */}
         <Link
           className={`w-full ${buttonVariants({ variant: "ghost" })}`}
-          href={"/credits"}
+          href={"/wallet"}
         >
-          ₱ Credits
+          ₱ Wallet
         </Link>
       </div>
       <Separator />

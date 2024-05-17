@@ -19,3 +19,12 @@ interface OwnedLocation {
   name: string;
   hourlyRate: number;
 }
+
+type UserProps = {
+  user: {
+    username: string;
+    ownedLocations: any; // edit later
+    occupiedSlots: any; // edit later
+    id: string;
+  };
+};
