@@ -1,29 +1,25 @@
 "use client";
 import "gridstack/dist/gridstack.min.css";
 import "gridstack/dist/gridstack-extra.min.css";
-// import './CustomStyles.css';
 import { GridStack, GridStackNode } from "gridstack";
 import React, { useState, useEffect, useRef } from "react";
 
-export default function CustomParkingGrid({ num }: { num: number }) {
-  const [count, setCount] = useState(0);
-  // const [info, setInfo] = useState("");
-  const [items, setItems] = useState([
-    { x: 2, y: 1, h: 2 },
-    { x: 2, y: 4, w: 3 },
-    { x: 4, y: 2 },
-    { x: 3, y: 1, h: 2 },
-    { x: 0, y: 6, w: 2, h: 2 },
-  ]);
+type ParkingGridProps = {
+  parkingSlotNum: number;
+  setSlotNumChange: (number: number) => void;
+};
 
+export default function CustomParkingGrid({
+  parkingSlotNum,
+  setSlotNumChange,
+}: ParkingGridProps) {
   const gridRef = useRef<GridStack | null>(null);
-  const timerIdRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     gridRef.current = GridStack.init({
       float: true,
-      cellHeight: "70px",
-      minRow: 1,
+      cellHeight: "150px",
+      minRow: 2,
     });
 
     gridRef.current.on("dragstop", (event, element) => {
@@ -38,6 +34,7 @@ export default function CustomParkingGrid({ num }: { num: number }) {
       // timerIdRef.current = setTimeout(() => {
       //   setInfo("");
       // }, 2000);
+      console.log(gridRef.current?.save());
     });
 
     // Cleanup function to remove event listener
@@ -49,14 +46,9 @@ export default function CustomParkingGrid({ num }: { num: number }) {
   }, []);
 
   const addNewWidget = () => {
-    const node = items[count] || {
-      x: Math.round(12 * Math.random()),
-      y: Math.round(5 * Math.random()),
-      w: Math.round(1 + 3 * Math.random()),
-      h: Math.round(1 + 3 * Math.random()),
-    };
-    node.id = node.content = String(count);
-    setCount(count + 1);
+    const node: GridStackNode = { x: 0, y: 0, h: 1 };
+    node.id = node.content = String(parkingSlotNum + 1);
+    setSlotNumChange(parkingSlotNum + 1);
     if (gridRef.current) {
       gridRef.current.addWidget(node);
     }
