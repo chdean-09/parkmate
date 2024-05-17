@@ -23,3 +23,24 @@ export default async function UsePage() {
     </h1>
   );
 }
+
+// import Test from "@/components/test";
+// import { Suspense } from "react";
+
+// export default async function UsePage() {
+
+//   return (
+//     <>
+//       <h1>hello world, number is not from server</h1>
+//       <Suspense fallback={<Loading />}>
+//         <Test />
+//       </Suspense>
+//     </>
+//   );
+// }
+
+// function Loading() {
+//   return (
+//     <div>Loading...</div>
+//   )
+// }

@@ -1,7 +1,7 @@
-import PayPalPayment from "@/components/custom/paypal/Payment";
 import { validateRequest } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import LogoutForm from "@/components/custom/logoutForm";
+import PaymentButton from "@/components/custom/payment/paymentButton";
 
 export default async function Home() {
   const { user } = await validateRequest();
@@ -9,9 +9,13 @@ export default async function Home() {
     return redirect("/login");
   }
 
+  let totalPayment = 100;
+  const userId = "UniqueKey";
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <LogoutForm user={user} />
+      Introduction page for parkmate at / url
+      <PaymentButton totalPayment={totalPayment} userId={userId} />
     </main>
   );
 }
