@@ -1,5 +1,6 @@
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetDescription,
   SheetHeader,
@@ -7,12 +8,12 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import Image from "next/image";
+import Link from "next/link";
 
 import React from "react";
+import LogoutForm from "./logoutForm";
 
-type Props = {};
-
-const DropDownMenu = (props: Props) => {
+const DropDownMenu = () => {
   return (
     <Sheet>
       <SheetTrigger>
@@ -23,13 +24,36 @@ const DropDownMenu = (props: Props) => {
           alt="Picture of the author"
         />
       </SheetTrigger>
+
       <SheetContent>
         <SheetHeader>
-          <SheetTitle>Are you absolutely sure?</SheetTitle>
-          <SheetDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
-          </SheetDescription>
+          <ul className="flex flex-col gap-3">
+            <li>
+              <SheetClose asChild>
+                <Link href="/home">Home</Link>
+              </SheetClose>
+            </li>
+            <li>
+              <SheetClose asChild>
+                <Link href="/nearby">Nearby</Link>
+              </SheetClose>
+            </li>
+            <li>
+              <SheetClose asChild>
+                <Link href="/maps">Maps</Link>
+              </SheetClose>
+            </li>
+            <li>
+              <SheetClose asChild>
+                <Link href="/profile">Profile</Link>
+              </SheetClose>
+            </li>
+            <li>
+              <SheetClose asChild>
+                <LogoutForm />
+              </SheetClose>
+            </li>
+          </ul>
         </SheetHeader>
       </SheetContent>
     </Sheet>
