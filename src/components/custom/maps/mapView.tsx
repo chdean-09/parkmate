@@ -17,7 +17,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 const containerStyle: CSSProperties = {
@@ -36,8 +35,7 @@ export default function MapComponent({
 }: {
   markerLocations: google.maps.LatLngLiteral[];
 }) {
-  const router = useRouter();
-
+  const [markerKey, setMarkerKey] = useState(0);
   const [clickedPosition, setClickedPosition] =
     useState<null | google.maps.LatLngLiteral>(null);
   const [selectedPlace, setSelectedPlace] =
@@ -63,6 +61,7 @@ export default function MapComponent({
             disableDefaultUI={true}
             onClick={(event) => {
               setClickedPosition(event.detail.latLng);
+              setMarkerKey((prevKey) => prevKey + 1);
             }}
           >
             <CustomMapControl
@@ -74,6 +73,8 @@ export default function MapComponent({
               <Dialog>
                 <DialogTrigger asChild>
                   <AdvancedMarker
+                    key={markerKey}
+                    className="drop"
                     position={clickedPosition}
                     zIndex={50}
                     onClick={(event) => {
@@ -116,16 +117,51 @@ export default function MapComponent({
             )}
 
             {markerLocations.map((location, index) => (
-              <AdvancedMarker
-                key={index}
-                position={location}
-                zIndex={50}
-                onClick={(event) => {
-                  console.log(event.latLng?.toJSON());
-                }}
-              >
-                <Image src="/marker.png" alt="marker" width={45} height={45} />
-              </AdvancedMarker>
+              <Dialog key={index}>
+                <DialogTrigger asChild>
+                  <AdvancedMarker
+                    className="animate-bounce"
+                    position={location}
+                    zIndex={50}
+                    onClick={(event) => {
+                      console.log(event.latLng?.toJSON());
+                    }}
+                  >
+                    <Image
+                      src="/marker.png"
+                      alt="marker"
+                      width={45}
+                      height={45}
+                    />
+                  </AdvancedMarker>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>
+                      Make changes to this parking spot?
+                    </DialogTitle>
+                    <DialogDescription>
+                      This action will take you to a separate page where you can
+                      update the parking spot info.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter>
+                    <DialogClose asChild>
+                      <Link
+                        href={{
+                          pathname: "/editor",
+                          query: {
+                            lat: location.lat,
+                            lng: location.lng,
+                          },
+                        }}
+                      >
+                        <Button>Confirm</Button>
+                      </Link>
+                    </DialogClose>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             ))}
           </Map>
           <MapHandler place={selectedPlace} currentLocation={currentLocation} />

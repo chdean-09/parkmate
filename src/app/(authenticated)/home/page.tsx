@@ -37,7 +37,7 @@ export default function Home() {
   // }, []);
   return (
     <main className="flex h-screen flex-col items-center px-3">
-      <div className="w-[95%] h-full my-3">
+      <div className="w-[95%] sm:w-[80%] h-full mb-3">
         <MapComponent markerLocations={markerLocations} />
       </div>
     </main>

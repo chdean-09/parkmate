@@ -1,24 +1,24 @@
-async function test() {
-  const res = await fetch("http://localhost:3000/api/test/35345353", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+// async function test() {
+//   const res = await fetch("http://localhost:3000/api/test/35345353", {
+//     method: "GET",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//   });
 
-  if (!res.ok) {
-    throw new Error("Failed to fetch data");
-  }
+//   if (!res.ok) {
+//     throw new Error("Failed to fetch data");
+//   }
 
-  return await res.json();
-}
+//   return await res.json();
+// }
 
 export default async function UsePage() {
-  const data = await test();
+  // const data = await test();
 
   return (
     <h1>
-      hello world, number is {data.number}
+      {/* hello world, number is {data.number} */}
       <p id="selenium-test">haii selenium</p>
     </h1>
   );
