@@ -1,10 +1,4 @@
-import DisplayMapDetails from "@/components/custom/maps/displayMap";
-import Search from "@/components/custom/search";
-import { SkeletonMap } from "@/components/custom/skeletonUI/mapSkeleton";
-import { useEffect, useState } from "react";
-import { fetchDataMap } from "@/lib/mapData";
 import MapComponent from "@/components/custom/maps/mapView";
-import { Suspense } from "react";
 
 const mockParkingSlotNumber: number = 3;
 
