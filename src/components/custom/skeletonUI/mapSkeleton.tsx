@@ -1,7 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton";
 
 export function SkeletonMap() {
-  console.log("TWQS");
   return (
     <div className="h-56 w-full flex flex-col space-y-3">
       ASDugasiudhasudh

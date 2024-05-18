@@ -1,6 +1,5 @@
 import { validateRequest } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import LogoutForm from "@/components/custom/logoutForm";
 import PaymentButton from "@/components/custom/payment/paymentButton";
 
 export default async function Home() {
