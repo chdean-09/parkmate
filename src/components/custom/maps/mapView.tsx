@@ -43,8 +43,7 @@ export default function MapComponent({
   const [currentLocation, setCurrentLocation] =
     useState<null | google.maps.LatLngLiteral>(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  console.log(process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY);
-  console.log(process.env.NEXT_PUBLIC_GOOGLE_MAP_ID);
+
   return (
     <APIProvider
       apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY || ""}
