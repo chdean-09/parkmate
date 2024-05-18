@@ -22,19 +22,6 @@ const markerLocations: google.maps.LatLngLiteral[] = [
 ];
 
 export default function Home() {
-  // const [dataMap, setDataMap] = useState<GoogleMapData[] | null>(null);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const mapData = await fetchDataMap();
-  //       setDataMap(mapData);
-  //     } catch (error) {
-  //       console.error("Error fetching map data:", error);
-  //     }
-  //   };
-  //   fetchData();
-  // }, []);
   return (
     <main className="flex h-screen flex-col items-center px-3">
       <div className="w-[95%] sm:w-[80%] h-full mb-3">
