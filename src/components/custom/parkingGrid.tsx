@@ -11,91 +11,29 @@ import {
 import React, { useState, useEffect, useRef, createRef } from "react";
 import { Button } from "../ui/button";
 import { getCellHeightForBreakpoint } from "@/utils/responsiveCellHeight";
+import Image from "next/image";
 
 type ParkingGridProps = {
-  layout: GridStackWidget[] | GridStackOptions;
   setLayout: (widgets: GridStackWidget[] | GridStackOptions) => void;
 };
 
-// export default function CustomParkingGrid({
-//   parkingSlotNum,
-//   setSlotNumChange,
-// }: ParkingGridProps) {
-//   const gridRef = useRef<GridStack | null>(null);
-
-//   useEffect(() => {
-//     gridRef.current = GridStack.init({
-//       float: true,
-//       cellHeight: 'auto',
-//       cellHeightThrottle: 100,
-//       minRow: 2,
-//     });
-
-//     gridRef.current.on("dragstop", (event, element) => {
-//       const node = element.gridstackNode;
-//       // setInfo(`you just dragged node #${node.id} to ${node.x},${node.y} – good job`);
-
-//       // Clear the info text after a two second timeout.
-//       // Clears previous timeout first.
-//       // if (timerIdRef.current) {
-//       //   clearTimeout(timerIdRef.current);
-//       // }
-//       // timerIdRef.current = setTimeout(() => {
-//       //   setInfo("");
-//       // }, 2000);
-//       console.log(gridRef.current?.save());
-//     });
-
-//     // Cleanup function to remove event listener
-//     return () => {
-//       if (gridRef.current) {
-//         gridRef.current.off("dragstop");
-//       }
-//     };
-//   }, []);
-
-//   const addNewWidget = () => {
-//     const node: GridStackNode = { x: 0, y: 0, h: 1 };
-//     node.id = node.content = String(parkingSlotNum + 1);
-//     setSlotNumChange(parkingSlotNum + 1);
-//     if (gridRef.current) {
-//       gridRef.current.addWidget(node);
-//     }
-//   };
-
-//   return (
-//     <div>
-//       <button type="button" onClick={addNewWidget}>
-//         Add Widget
-//       </button>
-//       <section className="grid-stack"></section>
-//     </div>
-//   );
-// }
-
-// Controlled example
-
-// const ControlledStack = ({ items, addItem }) => {
-
-//   return (
-
-//   )
-// }
-
-export default function CustomParkingGrid({
-  layout,
-  setLayout,
-}: ParkingGridProps) {
-  const [items, setItems] = useState<{ id: string }[]>([]);
+export default function CustomParkingGrid({ setLayout }: ParkingGridProps) {
+  const [items, setItems] = useState<{ id: string; rotation: number }[]>([]);
 
   const refs = useRef<Record<string, React.RefObject<HTMLDivElement>>>({});
-  const gridRef = useRef<GridStack | null>(null);
+  const gridRef = useRef<GridStack>();
 
   if (Object.keys(refs.current).length !== items.length) {
     items.forEach(({ id }) => {
       refs.current[id] = refs.current[id] || createRef();
     });
   }
+
+  const removeWidget = () => {
+    setItems((currentItems) => {
+      return currentItems.slice(0, -1);
+    });
+  };
 
   useEffect(() => {
     gridRef.current = GridStack.init(
@@ -140,23 +78,55 @@ export default function CustomParkingGrid({
   return (
     <div>
       <Button
-        className="mb-2"
+        className="mb-2 mr-2"
         onClick={() => {
-          setItems([...items, { id: `${items.length + 1}` }]);
+          setItems([...items, { id: `${items.length + 1}`, rotation: 0 }]);
         }}
       >
         Add new spot
       </Button>
+      <Button
+        variant={"destructive"}
+        className="mb-2"
+        onClick={() => removeWidget()}
+        disabled={items.length === 0}
+      >
+        Delete spot
+      </Button>
       <div className={`grid-stack controlled border border-black`}>
-        {items.map((item, i) => {
+        {items.map((item) => {
           return (
             <div
               ref={refs.current[item.id]}
               key={item.id}
               className={"grid-stack-item"}
+              style={{ transform: `rotate(${item.rotation}deg)` }}
             >
               <div className="grid-stack-item-content">
-                <div>{item.id}</div>
+                <div style={{ transform: `rotate(${-item.rotation}deg)` }}>
+                  {item.id}
+                </div>
+                <Image
+                  src={"/rotate.png"}
+                  alt="Rotate"
+                  width={25}
+                  height={25}
+                  className="cursor-pointer absolute top-0 right-0"
+                  onClick={() => {
+                    // rotate the item by 90 degrees
+                    const newItems = items.map((it) =>
+                      it.id === item.id
+                        ? {
+                            ...it,
+                            rotation:
+                              // if rotation is 270, set it back to 0
+                              it.rotation === 270 ? 0 : it.rotation + 90,
+                          }
+                        : it,
+                    );
+                    setItems(newItems);
+                  }}
+                />
               </div>
             </div>
           );

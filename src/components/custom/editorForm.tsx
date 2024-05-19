@@ -44,21 +44,9 @@ export default function EditorForm() {
           </Label>
           <Input id="rate" placeholder="0.00" className="col-span-3" required />
         </div>
-        {/* <div className="grid grid-cols-4 items-center gap-4">
-          <Label htmlFor="slot-num" className="text-right">
-            Number of Parking Slots
-          </Label>
-          <Input
-            id="slot-num"
-            className="col-span-3"
-            value={parkingSlotsNum.length}
-            onChange={(event) => setParkingSlotsNum(Number(event.target.value))}
-            required
-          />
-        </div> */}
       </div>
       <div className="w-full mb-6">
-        <CustomParkingGrid layout={layout} setLayout={setLayout} />
+        <CustomParkingGrid setLayout={setLayout} />
       </div>
     </section>
   );
