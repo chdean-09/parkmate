@@ -14,10 +14,61 @@ import { getCellHeightForBreakpoint } from "@/utils/responsiveCellHeight";
 import Image from "next/image";
 
 type ParkingGridProps = {
+  layout: (GridStackWidget & { id: string })[];
   setLayout: (widgets: GridStackWidget[] | GridStackOptions) => void;
 };
 
-export default function CustomParkingGrid({ setLayout }: ParkingGridProps) {
+// export default function CustomParkingGrid({ layout, setLayout }: ParkingGridProps) {
+//   const refs = useRef<Record<string, React.RefObject<HTMLDivElement>>>({})
+//   const gridRef = useRef<GridStack>()
+
+//   if (Object.keys(refs.current).length !== layout.length) {
+//     layout.forEach(({ id }) => {
+//       refs.current[id] = refs.current[id] || createRef()
+//     })
+//   }
+
+//   useEffect(() => {
+
+//     gridRef.current = gridRef.current ||
+//       GridStack.init({
+//         float: true,
+//         minRow: 2,
+//         column: 8,
+//         cellHeight: getCellHeightForBreakpoint(window.innerWidth),
+//         disableResize: true,
+//       })
+//     const grid: GridStack = gridRef.current
+//     grid.batchUpdate()
+//     grid.removeAll(false)
+//     layout.forEach(({ id }) => {
+//       grid.makeWidget(refs.current[id].current)
+//     })
+//     grid.batchUpdate(false)
+//   }, [layout])
+
+//   return (
+//     <div>
+//       <button onClick={() => setLayout([...layout, { id: `item-${layout.length + 1}` }])}>Add new widget</button>
+//       <div className={`grid-stack controlled`}>
+//         {layout.map((item, i) => {
+//           return (
+//             <div ref={refs.current[item.id]} key={i} className={'grid-stack-item'}>
+//               <div className="grid-stack-item-content">
+//                 <div>{item.id}</div>
+//               </div>
+//             </div>
+//           )
+//         })}
+//       </div>
+//     </div>
+//   )
+// }
+
+export default function CustomParkingGrid({
+  layout,
+  setLayout,
+}: ParkingGridProps) {
   const [items, setItems] = useState<{ id: string; rotation: number }[]>([]);
 
   const refs = useRef<Record<string, React.RefObject<HTMLDivElement>>>({});
@@ -45,15 +96,15 @@ export default function CustomParkingGrid({ setLayout }: ParkingGridProps) {
         disableResize: true,
       },
       ".controlled",
-    );
+    ).load(layout as GridStackWidget[]);
 
     const grid: GridStack = gridRef.current;
-    grid.batchUpdate();
-    grid.removeAll(false);
-    items.forEach(({ id }) => {
-      grid.makeWidget(refs.current[id].current as GridHTMLElement);
-    });
-    grid.batchUpdate(false);
+    // grid.batchUpdate();
+    // grid.removeAll(false);
+    // items.forEach(({ id }) => {
+    //   grid.makeWidget(refs.current[id].current as GridHTMLElement);
+    // });
+    // grid.batchUpdate(false);
 
     // saves layout every time ga add ka or move a spot
     grid.on("added", (event, element) => {
@@ -73,16 +124,26 @@ export default function CustomParkingGrid({ setLayout }: ParkingGridProps) {
 
     // Cleanup event listener on component unmount
     return () => window.removeEventListener("resize", resizeHandler);
-  }, [items, setLayout]);
+  }, [layout, setLayout]);
+
+  const addWidget = () => {
+    const newItem = { id: `${items.length + 1}`, rotation: 0 };
+    setItems([...items, newItem]);
+
+    // Step 3: Use the ref in your `onClick` handler
+    if (gridRef.current) {
+      gridRef.current.addWidget({
+        x: 0,
+        y: 0,
+        content: "jj",
+        id: newItem.id,
+      });
+    }
+  };
 
   return (
     <div>
-      <Button
-        className="mb-2 mr-2"
-        onClick={() => {
-          setItems([...items, { id: `${items.length + 1}`, rotation: 0 }]);
-        }}
-      >
+      <Button className="mb-2 mr-2" onClick={addWidget}>
         Add new spot
       </Button>
       <Button
@@ -109,9 +170,9 @@ export default function CustomParkingGrid({ setLayout }: ParkingGridProps) {
                 <Image
                   src={"/rotate.png"}
                   alt="Rotate"
-                  width={25}
-                  height={25}
-                  className="cursor-pointer absolute top-0 right-0"
+                  width={20}
+                  height={20}
+                  className="cursor-pointer m-auto"
                   onClick={() => {
                     // rotate the item by 90 degrees
                     const newItems = items.map((it) =>

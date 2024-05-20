@@ -4,10 +4,14 @@ import { useSearchParams } from "next/navigation";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import CustomParkingGrid from "./parkingGrid";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { GridStackOptions, GridStackWidget } from "gridstack";
 
-export default function EditorForm() {
+export default function EditorForm({
+  fetchedLayout,
+}: {
+  fetchedLayout: GridStackWidget[];
+}) {
   const searchParams = useSearchParams();
 
   const lat = searchParams.getAll("lat");
@@ -16,6 +20,14 @@ export default function EditorForm() {
   const [layout, setLayout] = useState<GridStackWidget[] | GridStackOptions>(
     [],
   );
+
+  useEffect(() => {
+    fetchedLayout.forEach((n, i) => {
+      n.id = String(i);
+    });
+    setLayout(fetchedLayout);
+  }, [fetchedLayout]);
+
   console.log(layout, "ahahh");
 
   return (
@@ -46,7 +58,10 @@ export default function EditorForm() {
         </div>
       </div>
       <div className="w-full mb-6">
-        <CustomParkingGrid setLayout={setLayout} />
+        <CustomParkingGrid
+          layout={layout as (GridStackWidget & { id: string })[]}
+          setLayout={setLayout}
+        />
       </div>
     </section>
   );
