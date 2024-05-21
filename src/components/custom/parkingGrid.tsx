@@ -5,6 +5,7 @@ import "gridstack/dist/gridstack-extra.min.css";
 import {
   GridHTMLElement,
   GridStack,
+  GridStackNode,
   GridStackOptions,
   GridStackWidget,
 } from "gridstack";
@@ -12,6 +13,7 @@ import React, { useState, useEffect, useRef, createRef } from "react";
 import { Button } from "../ui/button";
 import { getCellHeightForBreakpoint } from "@/utils/responsiveCellHeight";
 import Image from "next/image";
+import { attachRotationListener } from "@/utils/rotateParkingSlot";
 
 type ParkingGridProps = {
   layout: (GridStackWidget & { id: string })[];
@@ -28,12 +30,20 @@ export default function CustomParkingGrid({
     if (gridRef.current) {
       const id = (layout.length + 1).toString();
 
-      const newWidget = {
+      const newWidget: GridStackWidget = {
         x: 0,
         y: 0,
-        content: id,
+        content: `<div class="widget-content">${id}</div>`,
         id: id,
       };
+
+      // with rotation
+      //   content: `
+      //   <div class="widget-content">
+      //     <p class="widget-text">${id}</p>
+      //     <button class="rotate-button">Rotate</button>
+      //   </div>
+      // `,
 
       gridRef.current.addWidget(newWidget);
     }
@@ -67,6 +77,7 @@ export default function CustomParkingGrid({
     // saves layout every time ga add ka or move a spot
     grid.on("added", (event, element) => {
       setLayout(grid.save());
+      // attachRotationListener(element);
     });
     grid.on("dragstop", (event, element) => {
       setLayout(grid.save());
