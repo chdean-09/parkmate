@@ -100,13 +100,7 @@ export default function MapComponent({
                   <DialogFooter>
                     <DialogClose asChild>
                       <Link
-                        href={{
-                          pathname: "/editor",
-                          query: {
-                            lat: clickedPosition.lat,
-                            lng: clickedPosition.lng,
-                          },
-                        }}
+                        href={`/editor/${clickedPosition.lat}/${clickedPosition.lng}`}
                       >
                         <Button>Confirm</Button>
                       </Link>
@@ -147,15 +141,7 @@ export default function MapComponent({
                   </DialogHeader>
                   <DialogFooter>
                     <DialogClose asChild>
-                      <Link
-                        href={{
-                          pathname: "/editor",
-                          query: {
-                            lat: location.lat,
-                            lng: location.lng,
-                          },
-                        }}
-                      >
+                      <Link href={`/editor/${location.lat}/${location.lng}`}>
                         <Button>Confirm</Button>
                       </Link>
                     </DialogClose>

@@ -8,13 +8,15 @@ export default async function Home() {
     return redirect("/login");
   }
 
-  let totalPayment = 100;
-  const userId = "UniqueKey";
+  redirect("/home");
 
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      Introduction page for parkmate at / url
-      <PaymentButton totalPayment={totalPayment} userId={userId} />
-    </main>
-  );
+  // let totalPayment = 100;
+  // const userId = "UniqueKey";
+
+  // return (
+  //   <main className="flex min-h-screen flex-col items-center justify-between p-24">
+  //     Introduction page for parkmate at / url
+  //     <PaymentButton totalPayment={totalPayment} userId={userId} />
+  //   </main>
+  // );
 }

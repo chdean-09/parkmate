@@ -3,9 +3,8 @@ interface ActionResult {
 }
 
 interface OccupiedSlot {
+  id: string;
   content: string;
-  height: number;
-  width: number;
   x: number;
   y: number;
   locationId: number;

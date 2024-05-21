@@ -26,7 +26,8 @@ export default function CustomParkingGrid({
 }: ParkingGridProps) {
   const gridRef = useRef<GridStack>();
 
-  function addWidget() {
+  function addWidget(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    event.preventDefault();
     if (gridRef.current) {
       const id = (layout.length + 1).toString();
 
@@ -49,7 +50,10 @@ export default function CustomParkingGrid({
     }
   }
 
-  function removeWidget() {
+  function removeWidget(
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) {
+    event.preventDefault();
     // remove widget with highest id
     const maxId = Math.max(...layout.map((widget) => parseInt(widget.id)));
 
@@ -97,13 +101,13 @@ export default function CustomParkingGrid({
 
   return (
     <div>
-      <Button className="mb-2 mr-2" onClick={addWidget}>
+      <Button className="mb-2 mr-2" onClick={(event) => addWidget(event)}>
         Add new spot
       </Button>
       <Button
         variant={"destructive"}
         className="mb-2"
-        onClick={removeWidget}
+        onClick={(event) => removeWidget(event)}
         disabled={layout.length === 0}
       >
         Delete spot

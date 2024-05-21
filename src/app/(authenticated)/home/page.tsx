@@ -1,19 +1,27 @@
+import prisma from "@/lib/db";
 import MapComponent from "@/components/custom/maps/mapView";
 
-const mockParkingSlotNumber: number = 3;
+const fetchedMarkers = await prisma.parkingLocation.findMany({
+  select: {
+    latitude: true,
+    longitude: true,
+  },
+});
 
-interface GoogleMapData {
-  location: string;
-  city: string;
-  parkingSpotName: string;
-}
+const markerLocations: google.maps.LatLngLiteral[] = fetchedMarkers.map(
+  (location) => ({
+    lat: location.latitude,
+    lng: location.longitude,
+  }),
+);
 
-const markerLocations: google.maps.LatLngLiteral[] = [
-  { lat: 10.730833, lng: 122.548056 },
-  { lat: 10.730947804777555, lng: 122.54912967652788 },
-  { lat: 10.7312078214488, lng: 122.54798526640617 },
-  { lat: 10.72991677874751, lng: 122.54860578371651 },
-];
+// console.log(fetchedMarkers, 'markerLocations')
+// const markerLocations: google.maps.LatLngLiteral[] = [
+//   { lat: 10.730833, lng: 122.548056 },
+//   { lat: 10.730947804777555, lng: 122.54912967652788 },
+//   { lat: 10.7312078214488, lng: 122.54798526640617 },
+//   { lat: 10.72991677874751, lng: 122.54860578371651 },
+// ];
 
 export default function Home() {
   return (
