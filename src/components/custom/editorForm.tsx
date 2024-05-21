@@ -33,7 +33,7 @@ export default function EditorForm({
   owner: User;
   latitude: number;
   longitude: number;
-  fetchedData: ParkingLocation | null;
+  fetchedData: (ParkingLocation & { parkingSlots: ParkingSlot[] }) | null;
 }) {
   const router = useRouter();
   const gridLayout: ParkingSlot[] = fetchedData?.parkingSlots || [];
