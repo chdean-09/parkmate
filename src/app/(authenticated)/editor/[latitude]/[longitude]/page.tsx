@@ -4,8 +4,6 @@ import prisma from "@/lib/db";
 import { GridStackWidget } from "gridstack";
 import { redirect } from "next/navigation";
 
-export const dynamic = "force-dynamic";
-
 export default async function Editor({
   params,
 }: {

@@ -1,6 +1,8 @@
 import prisma from "@/lib/db";
 import MapComponent from "@/components/custom/maps/mapView";
 
+export const dynamic = "force-dynamic";
+
 const fetchedMarkers = await prisma.parkingLocation.findMany({
   select: {
     latitude: true,
