@@ -1,13 +1,10 @@
 import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
+import { getUser } from "@/actions/getUser";
 
-function DisplayProfile({ user }: UserProps) {
-  const { username, ownedLocations, occupiedSlots } = user;
-
-  const balance = 1000;
-
+async function DisplayProfile({ owner }: UserProps) {
   return (
     <div className="flex flex-col items-center justify-center">
       <div className="w-24 h-24 relative rounded-full border p-5 flex items-center justify-center my-8">
@@ -19,50 +16,44 @@ function DisplayProfile({ user }: UserProps) {
           style={{ objectFit: "contain" }}
         />
       </div>
-      <p className="font-semibold text-3xl">{username}</p>
+      <p className="font-semibold text-3xl">{owner.username}</p>
       {/* INFO */}
       <div className="w-full flex items-center justify-center my-7">
         <div className="flex gap-3 h-10 items-center">
           <div className="flex flex-col text-center">
-            <p className="font-bold text-xl">
-              {ownedLocations ? ownedLocations : 0}
-            </p>
+            <p className="font-bold text-xl">ownedLocations</p>
             <p className="text-blue-700">Owned</p>
           </div>
           {/* Hopefully can view currently reserved parking spot */}
           <Separator orientation="vertical" />
           <div className="flex flex-col text-center">
-            <p className="font-bold text-xl">
-              {occupiedSlots ? occupiedSlots : 0}
-            </p>
+            <p className="font-bold text-xl">occupiedSlots</p>
             <p className="text-blue-700">Reserved</p>
           </div>
           <Separator orientation="vertical" />
           <div className="flex flex-col text-center">
-            <p className="font-bold text-xl">{balance}</p>
+            <p className="font-bold text-xl">{owner.wallet}</p>
             <p className="text-blue-700">Balance</p>
           </div>
         </div>
       </div>
       {/* Redirect Buttons */}
       <div className="w-full text-center">
-        <Link
-          className={`w-full ${buttonVariants({ variant: "ghost" })}`}
-          href={"/get-currently-owned"}
-        >
-          View Owned Slot
-        </Link>
+        <Button asChild variant={"ghost"} className="w-full ">
+          <Link href="/reserved-spot"> View Owned Slot</Link>
+        </Button>
         <Separator />
 
         {/* E-Wallet */}
-        <Link
-          className={`w-full ${buttonVariants({ variant: "ghost" })}`}
-          href={"/wallet"}
-        >
-          ₱ Wallet
-        </Link>
+        <Button asChild variant={"ghost"} className="w-full ">
+          <Link href="/wallet">₱ Wallet</Link>
+        </Button>
+        <Separator />
+
+        <Button asChild variant={"ghost"} className="w-full ">
+          <Link href="/cashin">Cash In</Link>
+        </Button>
       </div>
-      <Separator />
     </div>
   );
 }

@@ -82,7 +82,7 @@ const groupedTransactions = transactions.reduce<
   return acc;
 }, {});
 
-export default async function TransactionHistory({ user }: UserProps) {
+export default async function TransactionHistory({ owner }: UserProps) {
   const map = await fetchDataMap();
 
   return (

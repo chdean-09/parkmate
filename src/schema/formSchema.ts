@@ -26,6 +26,13 @@ export const parkingFormSchema = z.object({
       y: z.coerce.number(),
       content: z.string(),
       id: z.string(),
-    }),
+    })
   ),
+});
+
+export const cashInFormSchema = z.object({
+  amount: z.coerce
+    .number()
+    .positive()
+    .max(100000, { message: "Max cash in amount is ₱ 100000" }),
 });

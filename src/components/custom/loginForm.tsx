@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -8,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -21,6 +21,8 @@ interface LoginFormProps {
 }
 
 export default function LogInForm(props: LoginFormProps) {
+  const [isClicked, setIsClicked] = useState<boolean>(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -32,6 +34,8 @@ export default function LogInForm(props: LoginFormProps) {
   const { login } = props;
 
   async function handleSubmit(data: z.infer<typeof formSchema>) {
+    setIsClicked(true);
+
     const formData = new FormData();
     formData.append("username", data.username);
     formData.append("password", data.password);
@@ -56,6 +60,7 @@ export default function LogInForm(props: LoginFormProps) {
         });
       }
     }
+    setIsClicked(false);
   }
 
   return (
@@ -101,9 +106,35 @@ export default function LogInForm(props: LoginFormProps) {
             </FormItem>
           )}
         />
-        <Button className="w-full md:w-auto self-center" type="submit">
-          Submit
-        </Button>
+        {/* clicked */}
+        {isClicked && (
+          <Button
+            className={`flex gap-1 w-full md:w-auto self-center ${isClicked ? "disabled" : ""}`}
+            disabled={isClicked}
+            type="submit"
+          >
+            <div
+              className="inline-block h-4 w-4 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+              role="status"
+            >
+              <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+                Loading...
+              </span>
+            </div>
+            Login
+          
+          </Button>
+        )}
+        {/* not clicked */}
+        {!isClicked && (
+          <Button
+            className={`w-full md:w-auto self-center`}
+            type="submit"
+          >
+            {" "}
+            Login
+          </Button>
+        )}
       </form>
     </Form>
   );

@@ -5,15 +5,18 @@ import React from "react";
 
 type Props = {};
 
+export const revalidate = 0;
+
 async function ProfilePage({}: Props) {
   const { user } = await validateRequest();
+
   if (!user) {
     return redirect("/login");
   }
 
   return (
     <div>
-      <DisplayProfile user={user} />
+      <DisplayProfile owner={user} />
     </div>
   );
 }
