@@ -1,6 +1,11 @@
 import { Lucia, TimeSpan } from "lucia";
 import { PrismaAdapter } from "@lucia-auth/adapter-prisma";
-import { PrismaClient } from "@prisma/client";
+import {
+  PrismaClient,
+  ParkingSlot,
+  ParkingLocation,
+  Transaction,
+} from "@prisma/client";
 
 import { cookies } from "next/headers";
 import { cache } from "react";
@@ -23,8 +28,11 @@ export const lucia = new Lucia(adapter, {
     return {
       // attributes has the type of DatabaseUserAttributes
       username: attributes.username,
+      wallet: Number(attributes.wallet),
+      role: attributes.role,
       ownedLocations: attributes.ownedLocations,
       occupiedSlots: attributes.occupiedSlots,
+      transactions: attributes.transactions,
     };
   },
 });
@@ -38,8 +46,11 @@ declare module "lucia" {
 
 interface DatabaseUserAttributes {
   username: string;
-  ownedLocations: OwnedLocation[];
-  occupiedSlots: OccupiedSlot[];
+  role: string;
+  wallet: number;
+  transactions: Transaction[];
+  ownedLocations: ParkingLocation[];
+  occupiedSlots: ParkingSlot[];
 }
 
 export const validateRequest = cache(
