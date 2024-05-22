@@ -16,11 +16,13 @@ import Image from "next/image";
 import { attachRotationListener } from "@/utils/rotateParkingSlot";
 
 type ParkingGridProps = {
+  alreadyCreated: boolean;
   layout: (GridStackWidget & { id: string })[];
   setLayout: (widgets: GridStackWidget[] | GridStackOptions) => void;
 };
 
 export default function CustomParkingGrid({
+  alreadyCreated,
   layout,
   setLayout,
 }: ParkingGridProps) {
@@ -72,6 +74,7 @@ export default function CustomParkingGrid({
         column: 8,
         cellHeight: getCellHeightForBreakpoint(window.innerWidth),
         disableResize: true,
+        disableDrag: alreadyCreated,
       },
       ".controlled",
     ).load(layout as GridStackWidget[]);
@@ -101,17 +104,24 @@ export default function CustomParkingGrid({
 
   return (
     <div>
-      <Button className="mb-2 mr-2" onClick={(event) => addWidget(event)}>
-        Add new spot
-      </Button>
-      <Button
-        variant={"destructive"}
-        className="mb-2"
-        onClick={(event) => removeWidget(event)}
-        disabled={layout.length === 0}
-      >
-        Delete spot
-      </Button>
+      {!alreadyCreated && (
+        <>
+          <Button className="mb-2 mr-2" onClick={(event) => addWidget(event)}>
+            Add new spot
+          </Button>
+          <Button
+            variant={"destructive"}
+            className="mb-2"
+            onClick={(event) => removeWidget(event)}
+            disabled={layout.length === 0}
+          >
+            Delete spot
+          </Button>
+          <p className="text-sm">
+            Take note, you cannot edit grid layout once submitted
+          </p>
+        </>
+      )}
       <div className={`grid-stack controlled border border-black`}>
         {/* new widgets are inserted here! */}
       </div>
