@@ -4,20 +4,6 @@ import MapComponent from "@/components/custom/maps/mapView";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-const fetchedMarkers = await prisma.parkingLocation.findMany({
-  select: {
-    latitude: true,
-    longitude: true,
-  },
-});
-
-const markerLocations: google.maps.LatLngLiteral[] = fetchedMarkers.map(
-  (location) => ({
-    lat: location.latitude,
-    lng: location.longitude,
-  }),
-);
-
 // console.log(fetchedMarkers, "markerLocations");
 // const markerLocations: google.maps.LatLngLiteral[] = [
 //   { lat: 10.730833, lng: 122.548056 },
@@ -26,7 +12,21 @@ const markerLocations: google.maps.LatLngLiteral[] = fetchedMarkers.map(
 //   { lat: 10.72991677874751, lng: 122.54860578371651 },
 // ];
 
-export default function Home() {
+export default async function Home() {
+  const fetchedMarkers = await prisma.parkingLocation.findMany({
+    select: {
+      latitude: true,
+      longitude: true,
+    },
+  });
+
+  const markerLocations: google.maps.LatLngLiteral[] = fetchedMarkers.map(
+    (location) => ({
+      lat: location.latitude,
+      lng: location.longitude,
+    }),
+  );
+
   return (
     <main className="flex h-screen flex-col items-center px-3">
       <div className="w-[95%] sm:w-[80%] h-full mb-3">
