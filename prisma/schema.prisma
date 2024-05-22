@@ -58,15 +58,14 @@ model ParkingLocation {
 }
 
 model ParkingSlot {
-  id           Int             @id @default(autoincrement())
+  unique_id    Int             @id @default(autoincrement())
+  id           String
   content      String
-  height       Int
-  width        Int
   x            Int
   y            Int
   occupied     Boolean         @default(false)
   location     ParkingLocation @relation(fields: [locationId], references: [id])
-  locationId   Int             @unique
+  locationId   Int
   occupiedUser User?           @relation(fields: [userId], references: [id])
   userId       String?
   Transaction  Transaction[]
@@ -79,7 +78,7 @@ model Transaction {
   createdAt DateTime     @default(now())
   name      String
   amount    Float
-  slot      ParkingSlot? @relation(fields: [slotId], references: [id])
+  slot      ParkingSlot? @relation(fields: [slotId], references: [unique_id])
   slotId    Int?
   user      User         @relation(fields: [userId], references: [id])
   userId    String

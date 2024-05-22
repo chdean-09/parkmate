@@ -12,3 +12,20 @@ export const formSchema = z.object({
     .min(6, { message: "Password must be at least 6 characters" })
     .max(255, { message: "Password character limit is 255" }),
 });
+
+export const parkingFormSchema = z.object({
+  name: z
+    .string()
+    .min(3, { message: "Name must be at least 3 characters." })
+    .max(31, { message: "Name character limit is 31" }),
+  baseRate: z.coerce.number(),
+  hourlyRate: z.coerce.number(),
+  gridLayout: z.array(
+    z.object({
+      x: z.coerce.number(),
+      y: z.coerce.number(),
+      content: z.string(),
+      id: z.string(),
+    }),
+  ),
+});
