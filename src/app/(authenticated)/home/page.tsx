@@ -1,6 +1,8 @@
 import prisma from "@/lib/db";
 import MapComponent from "@/components/custom/maps/mapView";
 
+export const dynamic = "force-dynamic";
+
 const fetchedMarkers = await prisma.parkingLocation.findMany({
   select: {
     latitude: true,
@@ -15,7 +17,7 @@ const markerLocations: google.maps.LatLngLiteral[] = fetchedMarkers.map(
   }),
 );
 
-console.log(fetchedMarkers, "markerLocations");
+// console.log(fetchedMarkers, "markerLocations");
 // const markerLocations: google.maps.LatLngLiteral[] = [
 //   { lat: 10.730833, lng: 122.548056 },
 //   { lat: 10.730947804777555, lng: 122.54912967652788 },
