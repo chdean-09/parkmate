@@ -218,7 +218,7 @@ export default function EditorForm({
       {fetchedData && (
         <Dialog>
           <DialogTrigger asChild>
-            <Button variant={"destructive"} className="w-full max-w-80 mb-3">
+            <Button variant={"destructive"} className="w-full max-w-80">
               Delete
             </Button>
           </DialogTrigger>

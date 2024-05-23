@@ -2,6 +2,7 @@ import prisma from "@/lib/db";
 import MapComponent from "@/components/custom/maps/mapView";
 import { validateRequest } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import { ParkingLocation } from "@prisma/client";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -16,20 +17,22 @@ export default async function Home() {
     select: {
       latitude: true,
       longitude: true,
+      ownerId: true,
+      parkingSlots: {
+        select: {
+          x: true,
+          y: true,
+          occupied: true,
+          userId: true,
+        },
+      },
     },
   });
-
-  const markerLocations: google.maps.LatLngLiteral[] = fetchedMarkers.map(
-    (location) => ({
-      lat: location.latitude,
-      lng: location.longitude,
-    }),
-  );
 
   return (
     <main className="flex h-screen flex-col items-center px-3">
       <div className="w-[95%] sm:w-[80%] h-full mb-3">
-        <MapComponent markerLocations={markerLocations} />
+        <MapComponent user={user} markerInfo={fetchedMarkers} />
       </div>
     </main>
   );

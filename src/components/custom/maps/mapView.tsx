@@ -18,6 +18,8 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { ParkingLocation, ParkingSlot } from "@prisma/client";
+import { User } from "lucia";
 
 const containerStyle: CSSProperties = {
   width: "100%",
@@ -31,9 +33,21 @@ const center: google.maps.LatLngLiteral = {
 };
 
 export default function MapComponent({
-  markerLocations,
+  user,
+  markerInfo,
 }: {
-  markerLocations: google.maps.LatLngLiteral[];
+  user: User;
+  markerInfo: {
+    latitude: number;
+    longitude: number;
+    ownerId: string;
+    parkingSlots: {
+      x: number;
+      y: number;
+      occupied: boolean;
+      userId: string | null;
+    }[];
+  }[];
 }) {
   const [markerKey, setMarkerKey] = useState(0);
   const [clickedPosition, setClickedPosition] =
@@ -69,7 +83,7 @@ export default function MapComponent({
               onCurrentLocationSelect={setCurrentLocation}
             />
 
-            {clickedPosition && (
+            {user.role === "ADMIN" && clickedPosition && (
               <Dialog>
                 <DialogTrigger asChild>
                   <AdvancedMarker
@@ -77,9 +91,6 @@ export default function MapComponent({
                     className="drop"
                     position={clickedPosition}
                     zIndex={50}
-                    onClick={(event) => {
-                      console.log(event.latLng?.toJSON());
-                    }}
                   >
                     <Image
                       src="/marker.png"
@@ -110,45 +121,95 @@ export default function MapComponent({
               </Dialog>
             )}
 
-            {markerLocations.map((location, index) => (
-              <Dialog key={index}>
-                <DialogTrigger asChild>
-                  <AdvancedMarker
-                    className="animate-bounce"
-                    position={location}
-                    zIndex={50}
-                    onClick={(event) => {
-                      console.log(event.latLng?.toJSON());
-                    }}
-                  >
-                    <Image
-                      src="/marker.png"
-                      alt="marker"
-                      width={45}
-                      height={45}
-                    />
-                  </AdvancedMarker>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px]">
-                  <DialogHeader>
-                    <DialogTitle>
-                      Make changes to this parking spot?
-                    </DialogTitle>
-                    <DialogDescription>
-                      This action will take you to a separate page where you can
-                      update the parking spot info.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <DialogFooter>
-                    <DialogClose asChild>
-                      <Link href={`/editor/${location.lat}/${location.lng}`}>
-                        <Button>Confirm</Button>
-                      </Link>
-                    </DialogClose>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
-            ))}
+            {markerInfo.map((location, index) =>
+              // if user is admin and they own the location, they can edit
+              user.role === "ADMIN" && location.ownerId === user.id ? (
+                <Dialog key={index}>
+                  <DialogTrigger asChild>
+                    <AdvancedMarker
+                      className="animate-bounce"
+                      position={{
+                        lat: location.latitude,
+                        lng: location.longitude,
+                      }}
+                      zIndex={50}
+                      onClick={(event) => {
+                        console.log(event.latLng?.toJSON());
+                      }}
+                    >
+                      <Image
+                        src="/yellow-marker.png"
+                        alt="marker"
+                        width={45}
+                        height={45}
+                      />
+                    </AdvancedMarker>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                      <DialogTitle>
+                        Make changes to this parking spot?
+                      </DialogTitle>
+                      <DialogDescription>
+                        This action will take you to a separate page where you
+                        can update the parking spot info.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter>
+                      <DialogClose asChild>
+                        <Link
+                          href={`/editor/${location.latitude}/${location.longitude}`}
+                        >
+                          <Button>Confirm</Button>
+                        </Link>
+                      </DialogClose>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+              ) : (
+                // even if user is an admin, they can still reserve spots
+                <Dialog key={index}>
+                  <DialogTrigger asChild>
+                    <AdvancedMarker
+                      className="animate-bounce"
+                      position={{
+                        lat: location.latitude,
+                        lng: location.longitude,
+                      }}
+                      zIndex={50}
+                      onClick={(event) => {
+                        console.log(event.latLng?.toJSON());
+                      }}
+                    >
+                      <Image
+                        src="/marker.png"
+                        alt="marker"
+                        width={45}
+                        height={45}
+                      />
+                    </AdvancedMarker>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                      <DialogTitle>REG KA LANG</DialogTitle>
+                      <DialogDescription>
+                        This action will take you to a separate page where you
+                        can update the parking spot info.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter>
+                      <DialogClose asChild>
+                        <Link
+                          href={`/editor/${location.latitude}/${location.longitude}`}
+                        >
+                          <Button>Confirm</Button>
+                        </Link>
+                      </DialogClose>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+              ),
+            )}
           </Map>
           <MapHandler place={selectedPlace} currentLocation={currentLocation} />
         </>
