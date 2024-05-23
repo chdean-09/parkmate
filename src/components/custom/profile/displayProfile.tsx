@@ -1,8 +1,7 @@
 import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { getUser } from "@/actions/getUser";
 import { convertToPhPesoFormat } from "@/utils/convertToPhPesoFormat";
 
 async function DisplayProfile({ owner }: UserProps) {

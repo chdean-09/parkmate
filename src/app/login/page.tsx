@@ -15,7 +15,7 @@ export default async function Login() {
       <div className="">
         <LoginForm login={login} />
         <h1>
-          No account?{" "}
+          <span>No account?{" "}</span>
           <Link href="/signup" className="underline">
             Sign up now!
           </Link>
