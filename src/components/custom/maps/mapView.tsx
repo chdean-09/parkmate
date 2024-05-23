@@ -114,6 +114,7 @@ export default function MapComponent({
             />
 
             {showDirections.isVisible && (
+              // displays the direction from a place to another
               <Directions
                 latitude={showDirections.latitude}
                 longitude={showDirections.longitude}
@@ -122,6 +123,7 @@ export default function MapComponent({
             )}
 
             {user.role === "ADMIN" && clickedPosition && (
+              // if the user is an admin, they can create parking locations
               <Dialog>
                 <DialogTrigger asChild>
                   <AdvancedMarker
@@ -160,11 +162,9 @@ export default function MapComponent({
             )}
 
             {markerInfo.map((location, index) => {
+              // displays all the markers throughout the map
               const occupiedByUser = location.parkingSlots.some(
                 (slot) => slot.userId === user.id,
-              );
-              const locationFull = location.parkingSlots.every(
-                (slot) => slot.occupied,
               );
               const availableSlots = location.parkingSlots.filter(
                 (slot) => !slot.occupied,
@@ -172,7 +172,7 @@ export default function MapComponent({
 
               if (user.role === "ADMIN" && location.ownerId === user.id) {
                 return (
-                  // if admin sila and they created the location
+                  // if admin sila and they own/created the location
                   <Dialog key={index}>
                     <DialogTrigger asChild>
                       <AdvancedMarker
@@ -232,7 +232,7 @@ export default function MapComponent({
                           src={
                             occupiedByUser
                               ? "/blue-marker.png"
-                              : locationFull
+                              : availableSlots === 0
                                 ? "/gray-marker.png"
                                 : "/marker.png"
                           }
@@ -255,17 +255,35 @@ export default function MapComponent({
                             Available Parking Slots: {availableSlots} <br />
                           </DrawerDescription>
                         </DrawerHeader>
+                        {availableSlots === 0 && (
+                          <p className="text-sm text-red-500">
+                            This location is currently full. Please check back
+                            later.
+                          </p>
+                        )}
                         <DrawerFooter className="flex flex-row">
-                          <DialogClose asChild>
-                            <Link
-                              className="m-auto"
-                              href={`/editor/${location.latitude}/${location.longitude}`}
+                          {availableSlots > 0 ? (
+                            <>
+                              <DialogClose asChild>
+                                <Link
+                                  className="m-auto"
+                                  href={`/reserve/${location.latitude}/${location.longitude}`}
+                                >
+                                  <Button className="bg-green-700 hover:bg-green-600">
+                                    Reserve Now!
+                                  </Button>
+                                </Link>
+                              </DialogClose>
+                            </>
+                          ) : (
+                            <Button
+                              className="m-auto bg-green-700 hover:bg-green-600"
+                              disabled
                             >
-                              <Button className="bg-green-700 hover:bg-green-600">
-                                Reserve Now!
-                              </Button>
-                            </Link>
-                          </DialogClose>
+                              Reserve Now!
+                            </Button>
+                          )}
+
                           <DialogClose asChild>
                             <Button
                               className="m-auto"

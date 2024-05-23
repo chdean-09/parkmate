@@ -1,6 +1,9 @@
 import { validateRequest } from "@/lib/auth";
 import prisma from "@/lib/db";
+import { ChevronLeft } from "lucide-react";
+import Link from "next/link";
 import { redirect } from "next/navigation";
+import ReservationForm from "@/components/custom/reservationForm";
 
 export default async function Reserve({
   params,
@@ -29,5 +32,18 @@ export default async function Reserve({
     return redirect("/home");
   }
 
-  return <div>{locationExists.name}</div>;
+  return (
+    <div className="relative h-fit flex flex-col items-center py-3">
+      <div className="absolute left-0 top-0 flex flex-row">
+        <Link href="/home" className="text-lg font-bold text-black">
+          <ChevronLeft color="black" className="h-8 w-8" />
+        </Link>
+        <h1 className="hidden sm:block ml-2 text-2xl font-bold">Go back</h1>
+      </div>
+
+      <div className="text-2xl font-bold">Reserve Parking Spot</div>
+
+      <ReservationForm owner={user} fetchedData={locationExists} />
+    </div>
+  );
 }

@@ -54,11 +54,15 @@ export default function EditorForm({
     resolver: zodResolver(parkingFormSchema),
     defaultValues: {
       name: fetchedData?.name || "",
-      baseRate: fetchedData?.baseRate || 0,
-      hourlyRate: fetchedData?.hourlyRate || 0,
+      baseRate: fetchedData?.baseRate || undefined,
+      hourlyRate: fetchedData?.hourlyRate || undefined,
       gridLayout: gridLayout,
     },
   });
+
+  const baseRate = form.watch("baseRate");
+  const hourlyRate = form.watch("hourlyRate");
+  const grid = form.watch("gridLayout");
 
   async function handleSubmit(data: z.infer<typeof parkingFormSchema>) {
     const formData = new FormData();
@@ -206,7 +210,9 @@ export default function EditorForm({
           <Button
             className="basis-[100%] bg-green-700 hover:bg-green-600"
             disabled={
-              (layout as GridStackWidget[]).length === 0 ||
+              baseRate <= 0 ||
+              hourlyRate <= 0 ||
+              (grid as GridStackWidget[]).length === 0 ||
               !form.formState.isDirty // disable if wala gn change valuess
             }
             type="submit"

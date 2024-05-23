@@ -9,7 +9,7 @@ import {
   GridStackOptions,
   GridStackWidget,
 } from "gridstack";
-import React, { useState, useEffect, useRef, createRef } from "react";
+import React, { useState, useEffect, useRef, forwardRef } from "react";
 import { Button } from "../ui/button";
 import { getCellHeightForBreakpoint } from "@/utils/responsiveCellHeight";
 import Image from "next/image";
@@ -21,11 +21,10 @@ type ParkingGridProps = {
   setLayout: (widgets: GridStackWidget[] | GridStackOptions) => void;
 };
 
-export default function CustomParkingGrid({
-  alreadyCreated,
-  layout,
-  setLayout,
-}: ParkingGridProps) {
+export default forwardRef(function CustomParkingGrid(
+  { alreadyCreated, layout, setLayout }: ParkingGridProps,
+  ref,
+) {
   const gridRef = useRef<GridStack>();
 
   function addWidget(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
@@ -100,7 +99,7 @@ export default function CustomParkingGrid({
 
     // Cleanup event listener on component unmount
     return () => window.removeEventListener("resize", resizeHandler);
-  }, [layout, setLayout]);
+  }, [alreadyCreated, layout, setLayout]);
 
   return (
     <div>
@@ -117,7 +116,7 @@ export default function CustomParkingGrid({
           >
             Delete spot
           </Button>
-          <p className="text-sm">
+          <p className="text-sm text-red-500">
             Take note, you cannot edit grid layout once submitted
           </p>
         </>
@@ -127,4 +126,4 @@ export default function CustomParkingGrid({
       </div>
     </div>
   );
-}
+});
