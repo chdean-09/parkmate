@@ -8,21 +8,33 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Label } from "../ui/label";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "../ui/input";
 import CustomParkingGrid from "./parkingGrid";
 import { useEffect, useState } from "react";
 import { GridStackOptions, GridStackWidget } from "gridstack";
-import { submitLocation, updateLocation } from "@/actions/editorSubmit";
+import {
+  deleteLocation,
+  submitLocation,
+  updateLocation,
+} from "@/actions/editorSubmit";
 import { User } from "lucia";
 import { useRouter } from "next/navigation";
-import { Prisma, ParkingLocation, ParkingSlot } from "@prisma/client";
+import { ParkingLocation, ParkingSlot } from "@prisma/client";
 
 export default function EditorForm({
   owner,
@@ -55,11 +67,12 @@ export default function EditorForm({
     formData.append("baseRate", data.baseRate.toString());
     formData.append("hourlyRate", data.hourlyRate.toString());
     formData.append("gridLayout", JSON.stringify(data.gridLayout));
-    formData.append("latitude", latitude.toString());
-    formData.append("longitude", longitude.toString());
+    formData.append("latitude", String(latitude));
+    formData.append("longitude", String(longitude));
 
     if (fetchedData) {
-      const result = await updateLocation(formData, owner);
+      // update the location data
+      const result = await updateLocation(formData);
 
       if (result) {
         if (result.success) {
@@ -72,6 +85,7 @@ export default function EditorForm({
         }
       }
     } else {
+      // create a new location
       const result = await submitLocation(formData, owner);
 
       if (result) {
@@ -90,7 +104,6 @@ export default function EditorForm({
   const [layout, setLayout] = useState<GridStackWidget[] | GridStackOptions>(
     [],
   );
-  console.log(layout);
 
   useEffect(() => {
     setLayout(gridLayout);
@@ -137,6 +150,9 @@ export default function EditorForm({
                     className="col-span-3"
                     required
                     {...field}
+                    onChange={(event) => {
+                      field.onChange(parseInt(event.target.value));
+                    }}
                   />
                 </FormControl>
                 <FormMessage className="col-span-4 text-center" />
@@ -158,6 +174,9 @@ export default function EditorForm({
                     className="col-span-3"
                     required
                     {...field}
+                    onChange={(event) => {
+                      field.onChange(parseInt(event.target.value));
+                    }}
                   />
                 </FormControl>
                 <FormMessage className="col-span-4 text-center" />
@@ -171,23 +190,60 @@ export default function EditorForm({
           render={({ field }) => (
             <FormItem className="w-full mb-6">
               <CustomParkingGrid
+                alreadyCreated={fetchedData ? true : false}
                 layout={field.value as (GridStackWidget & { id: string })[]}
                 setLayout={(newLayout) => {
                   setLayout(newLayout);
                   field.onChange(newLayout);
                 }}
+                {...field}
               />
               <FormMessage className="col-span-4 text-center" />
             </FormItem>
           )}
         />
-        <Button
-          className="w-full max-w-56 self-center bg-green-700 hover:bg-green-600"
-          type="submit"
-        >
-          Submit
-        </Button>
+        <div className="flex flex-row gap-2 w-full max-w-80">
+          <Button
+            className="basis-[100%] bg-green-700 hover:bg-green-600"
+            disabled={
+              (layout as GridStackWidget[]).length === 0 ||
+              !form.formState.isDirty // disable if wala gn change valuess
+            }
+            type="submit"
+          >
+            Submit
+          </Button>
+        </div>
       </form>
+      {fetchedData && (
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant={"destructive"} className="w-full max-w-80">
+              Delete
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Are you absolutely sure?</DialogTitle>
+              <DialogDescription>
+                This action cannot be undone. This will permanently delete this
+                parking location and all its parking slots.
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button
+                  onClick={async () => {
+                    deleteLocation(fetchedData.latitude, fetchedData.longitude);
+                  }}
+                >
+                  Delete
+                </Button>
+              </DialogClose>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
     </Form>
   );
 }

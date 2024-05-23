@@ -46,7 +46,7 @@ declare module "lucia" {
 
 interface DatabaseUserAttributes {
   username: string;
-  role: string;
+  role: "REGULAR" | "ADMIN";
   wallet: number;
   transactions: Transaction[];
   ownedLocations: ParkingLocation[];

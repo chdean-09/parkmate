@@ -17,8 +17,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { User } from "lucia";
 
-export default function CashIn({ owner }: UserProps) {
+export default function CashIn({ owner }: { owner: User }) {
   const router = useRouter();
   const [isClicked, setIsClicked] = useState<boolean>(false);
 
