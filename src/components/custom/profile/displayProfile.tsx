@@ -3,6 +3,7 @@ import { Separator } from "@/components/ui/separator";
 import { Button, buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
 import { getUser } from "@/actions/getUser";
+import { convertToPhPesoFormat } from "@/utils/convertToPhPesoFormat";
 
 async function DisplayProfile({ owner }: UserProps) {
   return (
@@ -21,18 +22,18 @@ async function DisplayProfile({ owner }: UserProps) {
       <div className="w-full flex items-center justify-center my-7">
         <div className="flex gap-3 h-10 items-center">
           <div className="flex flex-col text-center">
-            <p className="font-bold text-xl">ownedLocations</p>
+            <p className="font-bold text-xl">Zero</p>
             <p className="text-blue-700">Owned</p>
           </div>
           {/* Hopefully can view currently reserved parking spot */}
           <Separator orientation="vertical" />
           <div className="flex flex-col text-center">
-            <p className="font-bold text-xl">occupiedSlots</p>
+            <p className="font-bold text-xl">Zero</p>
             <p className="text-blue-700">Reserved</p>
           </div>
           <Separator orientation="vertical" />
           <div className="flex flex-col text-center">
-            <p className="font-bold text-xl">{owner.wallet}</p>
+            <p className="font-bold text-xl">{convertToPhPesoFormat(owner.wallet)}</p>
             <p className="text-blue-700">Balance</p>
           </div>
         </div>
