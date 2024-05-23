@@ -2,7 +2,6 @@ import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
 import { Button, buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
-import { getUser } from "@/actions/getUser";
 
 async function DisplayProfile({ owner }: UserProps) {
   return (
