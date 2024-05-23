@@ -19,7 +19,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { User } from "lucia";
 
-export default function CashIn(user: User) {
+export default function CashIn({ owner }: { owner: User }) {
   const router = useRouter();
   const [isClicked, setIsClicked] = useState<boolean>(false);
 
@@ -36,7 +36,7 @@ export default function CashIn(user: User) {
 
     formData.append("amount", data.amount.toString());
 
-    const result = await cashIn(formData, user);
+    const result = await cashIn(formData, owner);
 
     if (result) {
       if (result.success) {
