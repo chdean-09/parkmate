@@ -154,9 +154,6 @@ export default function EditorForm({
                     className="col-span-3"
                     required
                     {...field}
-                    onChange={(event) => {
-                      field.onChange(parseInt(event.target.value));
-                    }}
                   />
                 </FormControl>
                 <FormMessage className="col-span-4 text-center" />
@@ -178,9 +175,6 @@ export default function EditorForm({
                     className="col-span-3"
                     required
                     {...field}
-                    onChange={(event) => {
-                      field.onChange(parseInt(event.target.value));
-                    }}
                   />
                 </FormControl>
                 <FormMessage className="col-span-4 text-center" />

@@ -43,7 +43,7 @@ export default async function Reserve({
 
       <div className="text-2xl font-bold">Reserve Parking Spot</div>
 
-      <ReservationForm owner={user} fetchedData={locationExists} />
+      <ReservationForm user={user} fetchedData={locationExists} />
     </div>
   );
 }

@@ -83,7 +83,19 @@ export default forwardRef(function CustomParkingGrid(
     // saves layout every time ga add ka or move a spot
     grid.on("added", (event, element) => {
       setLayout(grid.save());
-      // attachRotationListener(element);
+      console.log("hi");
+      console.log(element, "elem");
+      console.log(element[0], "hmm");
+      const htmlElement = element[0].el as HTMLElement;
+      const contentElement = htmlElement.querySelector(
+        ".grid-stack-item-content",
+      ) as HTMLElement;
+      console.log(contentElement, "contentElement");
+
+      // Attach the click event listener
+      contentElement.addEventListener("click", () => {
+        contentElement.classList.toggle("clicked");
+      });
     });
     grid.on("dragstop", (event, element) => {
       setLayout(grid.save());
@@ -99,7 +111,7 @@ export default forwardRef(function CustomParkingGrid(
 
     // Cleanup event listener on component unmount
     return () => window.removeEventListener("resize", resizeHandler);
-  }, [alreadyCreated, layout, setLayout]);
+  }, []);
 
   return (
     <div>
