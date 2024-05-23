@@ -9,12 +9,16 @@ export async function cashIn(formData: FormData, owner: User) {
     const amount = formData.get("amount");
 
     if (!amount || Number(amount) < 0 || Number(amount) > 100000) {
-      return { success: false, message: "Invalid amount. Amount must be between 0 and 100,000." };
+      return {
+        success: false,
+        message: "Invalid amount. Amount must be between 0 and 100,000.",
+      };
     }
 
     const newBalance = Number(amount) + owner.wallet;
 
-    const updateWallet = await prisma.user.update({
+    // update wallet
+    await prisma.user.update({
       where: {
         id: owner.id,
       },
@@ -23,7 +27,18 @@ export async function cashIn(formData: FormData, owner: User) {
       },
     });
 
+    //create transaction
+    await prisma.transaction.create({
+      data: {
+        amount: Number(amount),
+        userId: owner.id,
+        name: "Cash In",
+      },
+    });
+
     revalidatePath("/profile", "page");
+    revalidatePath("/wallet", "page");
+
     return { success: true };
   } catch (error) {
     console.log(error);

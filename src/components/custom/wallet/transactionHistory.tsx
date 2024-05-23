@@ -1,105 +1,44 @@
-import { fetchDataMap } from "@/lib/mapData";
 import React from "react";
 import Transaction from "./transactions";
-import { formatDate } from "@/utils/formatDate";
-
-interface TransactionProps {
-  id: number;
-  dateMs: number;
-  title: string;
-  amount: number;
-  type: "CashIn" | "Pay";
-}
-
-const transactions: TransactionProps[] = [
-  {
-    id: 1,
-    dateMs: 1685205600000,
-    title: "Fly Airways",
-    amount: 10.34,
-    type: "CashIn",
-  },
-  {
-    id: 2,
-    dateMs: 1685292000000,
-    title: "Uber",
-    amount: 21.06,
-    type: "Pay",
-  },
-  {
-    id: 3,
-    dateMs: 1685119200000,
-    title: "Tech Invest",
-    amount: -18750.0,
-    type: "Pay",
-  },
-  {
-    id: 4,
-    dateMs: 1685119200000,
-    title: "Clean Energy",
-    amount: -147.0,
-    type: "Pay",
-  },
-  {
-    id: 5,
-    dateMs: 1715962577371,
-    title: "Parking Space",
-    amount: -147.0,
-    type: "Pay",
-  },
-  {
-    id: 6,
-    dateMs: 1715962577371,
-    title: "Parking Space",
-    amount: -147.0,
-    type: "Pay",
-  },
-  {
-    id: 7,
-    dateMs: 1715962577371,
-    title: "Parking Space",
-    amount: -147.0,
-    type: "Pay",
-  },
-  {
-    id: 8,
-    dateMs: 1715962577371,
-    title: "Parking Space",
-    amount: -147.0,
-    type: "Pay",
-  },
-];
-
-const groupedTransactions = transactions.reduce<
-  Record<string, TransactionProps[]>
->((acc, transaction) => {
-  const date = formatDate(transaction.dateMs);
-  if (!acc[date]) {
-    acc[date] = [];
-  }
-
-  acc[date].push(transaction);
-  return acc;
-}, {});
+import prisma from "@/lib/db";
+import groupTransactionFormatter from "@/utils/groupedTransactionFormatter";
 
 export default async function TransactionHistory({ owner }: UserProps) {
-  const map = await fetchDataMap();
+  const transactions = await prisma.transaction.findMany({
+    where: {
+      userId: owner.id,
+    },
+  });
 
-  return (
-    <div className="p-5">
-      {Object.entries(groupedTransactions).map(([date, transactions]) => (
-        <div key={date} className="mb-4">
-          <h2 className="text-xl font-bold mb-2">{date}</h2>
-          {transactions.map((transaction) => (
-            <Transaction
-              key={transaction.id}
-              title={transaction.title}
-              amount={transaction.amount}
-              type={transaction.type}
-            />
-          ))}
-        </div>
-      ))}
-    </div>
-  );
+  const groupedTransactions = await groupTransactionFormatter(transactions);
+
+  if (!transactions || transactions.length === 0) {
+    return <h3>No Transaction History</h3>;
+  } else {
+    return (
+      <div className="p-5">
+        {(Object.entries(groupedTransactions) as [string, Record<string, TransactionProps[]>][]).map(([year, dates]) => (
+          <div key={year} className="mb-8">
+            <h1 className="text-2xl font-bold mb-4">{year}</h1>
+            {(Object.entries(dates) as [string, TransactionProps[]][]).map(([date, transactions]) => (
+              <div key={date} className="mb-4">
+                <h2 className="text-xl font-bold mb-2">{date}</h2>
+                {transactions.map((transaction) => (
+                  <Transaction
+                    key={transaction.id}
+                    id={transaction.id}
+                    createdAt={transaction.createdAt}
+                    name={transaction.name}
+                    amount={transaction.amount}
+                    slotId={transaction.slotId}
+                    userId={transaction.userId}
+                  />
+                ))}
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    );
+  }
 }

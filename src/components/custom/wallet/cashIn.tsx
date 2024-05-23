@@ -16,9 +16,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function CashIn({ owner }: UserProps) {
   const router = useRouter();
+  const [isClicked, setIsClicked] = useState<boolean>(false);
+
   const form = useForm<z.infer<typeof cashInFormSchema>>({
     resolver: zodResolver(cashInFormSchema),
     defaultValues: {
@@ -27,6 +30,7 @@ export default function CashIn({ owner }: UserProps) {
   });
 
   async function handleSubmit(data: z.infer<typeof cashInFormSchema>) {
+    setIsClicked(true);
     const formData = new FormData();
 
     formData.append("amount", data.amount.toString());
@@ -43,15 +47,16 @@ export default function CashIn({ owner }: UserProps) {
         });
       }
     }
+    setIsClicked(false);
   }
 
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-        className="w-[95%] flex flex-col items-center pb-3"
+        className="flex flex-col items-center pb-3 px-5 gap-5"
       >
-        <div className="grid gap-4 py-4">
+        <div className="grid gap-4 py-4 w-full md:w-56">
           <FormField
             control={form.control}
             name="amount"
@@ -60,6 +65,7 @@ export default function CashIn({ owner }: UserProps) {
                 <FormLabel>Amount</FormLabel>
                 <FormControl>
                   <Input
+                    className="w-full md:w-56"
                     id="amount"
                     placeholder="username"
                     required
@@ -72,12 +78,31 @@ export default function CashIn({ owner }: UserProps) {
           />
         </div>
 
-        <Button
-          className="w-full max-w-56 self-center bg-green-700 hover:bg-green-600"
-          type="submit"
-        >
-          Submit
-        </Button>
+        {/* clicked */}
+        {isClicked && (
+          <Button
+            className={`flex gap-1 w-full md:md:w-56 self-center ${isClicked ? "disabled" : ""}`}
+            disabled={isClicked}
+            type="submit"
+          >
+            <div
+              className="inline-block h-4 w-4 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+              role="status"
+            >
+              <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+                Loading...
+              </span>
+            </div>
+            Cash in
+          </Button>
+        )}
+        {/* not clicked */}
+        {!isClicked && (
+          <Button className={`w-full md:w-56 self-center`} type="submit">
+            {" "}
+            Cash in
+          </Button>
+        )}
       </form>
     </Form>
   );
