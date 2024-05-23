@@ -1,10 +1,8 @@
 import CurrentBalance from "@/components/custom/wallet/currentBalance";
 import TransactionHistory from "@/components/custom/wallet/transactionHistory";
 import { validateRequest } from "@/lib/auth";
-import { fetchDataMap } from "@/lib/mapData";
 import { redirect } from "next/navigation";
 import React, { Suspense } from "react";
-import Loading from "../loading";
 import { TransactionLoading } from "@/components/custom/skeletonUI/transactionLoading";
 
 type Props = {};
@@ -18,11 +16,11 @@ async function WalletPage({}: Props) {
   return (
     <div className="-translate-y-3">
       <div className=" bg-gradient-to-r from-blue-700 to-blue-500 ">
-        <CurrentBalance user={user} />
+        <CurrentBalance owner={user} />
       </div>
       <Suspense fallback={<TransactionLoading />}>
         <div>
-          <TransactionHistory user={user} />
+          <TransactionHistory owner={user} />
         </div>
       </Suspense>
     </div>

@@ -20,10 +20,23 @@ interface OwnedLocation {
 }
 
 type UserProps = {
-  user: {
-    username: string;
-    ownedLocations: any; // edit later
-    occupiedSlots: any; // edit later
+  owner: {
     id: string;
+    username: string;
+    ownedLocations: any ;
+    occupiedSlots: any;
+    transactions: any;
+    wallet: number;
+    role: string;
   };
 };
+
+
+interface TransactionProps {
+  id: number;
+  createdAt: Date;
+  name: string;
+  amount: number;
+  slotId: number | null;
+  userId: string;
+}

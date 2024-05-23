@@ -1,13 +1,14 @@
 import React from "react";
 import { convertToPhPesoFormat } from "@/utils/convertToPhPesoFormat";
+import { formatTimeToHMS } from "@/utils/timeFormatter";
 
-interface TransactionProps {
-  title: string;
-  amount: number;
-  type: "CashIn" | "Pay";
-}
-
-async function Transaction({ title, amount, type }: TransactionProps) {
+async function Transaction({
+  name,
+  amount,
+  createdAt,
+  slotId,
+  userId,
+}: TransactionProps) {
   const formattedAmount = convertToPhPesoFormat(amount);
   const isIncomeTransaction = amount >= 0;
   const color = isIncomeTransaction ? "text-green-500" : "text-red-500";
@@ -15,10 +16,11 @@ async function Transaction({ title, amount, type }: TransactionProps) {
 
   return (
     <div className="flex justify-between items-center py-1">
-      <div>
-        <p className="font-semibold">{title}</p>
+      <div className="w-1/3 text-left text-wrap ">
+        <p className="font-semibold truncate ">{name}</p>
       </div>
-      <div className={`${color} font-semibold flex items-center`}>
+      <div className="w-1/3 text-center truncate">{formatTimeToHMS(createdAt)}</div>
+      <div className={`${color} w-1/3 font-semibold text-right`}>
         {icon}
         <span>{formattedAmount.slice(1)}</span>
       </div>
