@@ -1,7 +1,7 @@
 "use client";
 
 import { APIProvider, AdvancedMarker, Map } from "@vis.gl/react-google-maps";
-import { useState, CSSProperties } from "react";
+import { useState, CSSProperties, useEffect } from "react";
 import MapHandler from "./mapHandler";
 import { CustomMapControl } from "./mapControl";
 import Image from "next/image";
@@ -31,6 +31,9 @@ import Link from "next/link";
 import { User } from "lucia";
 import { User as dbUser } from "@prisma/client";
 import { ParkingLocation, ParkingSlot } from "@prisma/client";
+import { useToast } from "@/components/ui/use-toast";
+
+import Directions from "./directions";
 
 const containerStyle: CSSProperties = {
   width: "100%",
@@ -54,6 +57,8 @@ export default function MapComponent({
     owner: dbUser;
   } & ParkingLocation)[];
 }) {
+  const { toast } = useToast();
+
   const [markerKey, setMarkerKey] = useState(0);
   const [clickedPosition, setClickedPosition] =
     useState<null | google.maps.LatLngLiteral>(null);
@@ -61,7 +66,27 @@ export default function MapComponent({
     useState<google.maps.places.PlaceResult | null>(null);
   const [currentLocation, setCurrentLocation] =
     useState<null | google.maps.LatLngLiteral>(null);
+  const [showDirections, setShowDirections] = useState<{
+    isVisible: boolean;
+    latitude: number;
+    longitude: number;
+  }>({ isVisible: false, latitude: 10.730833, longitude: 122.548056 });
+  const [directionDetails, setDirectionDetails] = useState<{
+    summary: string;
+    distance: string;
+    duration: string;
+  } | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    if (directionDetails) {
+      toast({
+        duration: 15000,
+        title: "Route Summary",
+        description: `Road: ${directionDetails.summary}, Distance: ${directionDetails.distance}, Duration: ${directionDetails.duration}`,
+      });
+    }
+  }, [directionDetails, toast]);
 
   return (
     <APIProvider
@@ -87,6 +112,14 @@ export default function MapComponent({
               onPlaceSelect={setSelectedPlace}
               onCurrentLocationSelect={setCurrentLocation}
             />
+
+            {showDirections.isVisible && (
+              <Directions
+                latitude={showDirections.latitude}
+                longitude={showDirections.longitude}
+                setDirectionDetails={setDirectionDetails}
+              />
+            )}
 
             {user.role === "ADMIN" && clickedPosition && (
               <Dialog>
@@ -183,62 +216,6 @@ export default function MapComponent({
               } else {
                 return (
                   // even if user is an admin, they can still reserve spots
-                  // <Dialog key={index}>
-                  //   <DialogTrigger asChild>
-                  //     <AdvancedMarker
-                  //       className="animate-bounce"
-                  //       position={{
-                  //         lat: location.latitude,
-                  //         lng: location.longitude,
-                  //       }}
-                  //       zIndex={50}
-                  //     >
-                  //       <Image
-                  //         // checks if the user has occupied a slot in the location
-                  //         // basically displays normal /marker.png if not occupied and not full ang location
-                  //         src={occupiedByUser ?
-                  //           "/blue-marker.png" :
-                  //           locationFull ?
-                  //             "/gray-marker.png"
-                  //             : "/marker.png"
-                  //         }
-                  //         alt="marker"
-                  //         width={45}
-                  //         height={45}
-                  //       />
-                  //     </AdvancedMarker>
-                  //   </DialogTrigger>
-                  //   <DialogContent className="sm:max-w-[425px]">
-                  //     {locationFull ? (
-                  //       <DialogHeader>
-                  //         <DialogTitle>Parking Location Full</DialogTitle>
-                  //         <DialogDescription>
-                  //           This location is currently full. Please check back
-                  //           later.
-                  //         </DialogDescription>
-                  //       </DialogHeader>
-                  //     ) : (
-                  //       <>
-                  //         <DialogHeader>
-                  //           <DialogTitle>Reserve a slot here?</DialogTitle>
-                  //           <DialogDescription>
-                  //             This action will take you to a separate page where you
-                  //             can see the
-                  //           </DialogDescription>
-                  //         </DialogHeader>
-                  //         <DialogFooter>
-                  //           <DialogClose asChild>
-                  //             <Link
-                  //               href={`/editor/${location.latitude}/${location.longitude}`}
-                  //             >
-                  //               <Button>Confirm</Button>
-                  //             </Link>
-                  //           </DialogClose>
-                  //         </DialogFooter>
-                  //       </>
-                  //     )}
-                  //   </DialogContent>
-                  // </Dialog>
                   <Drawer key={index}>
                     <DrawerTrigger asChild>
                       <AdvancedMarker
@@ -273,21 +250,37 @@ export default function MapComponent({
                           </DrawerTitle>
                           <DrawerDescription>
                             Owner: {location.owner.username} <br />
-                            Date Created:{" "}
-                            {location.createdAt.toLocaleDateString()} <br />
                             Base Rate: {location.baseRate} <br />
                             Hourly Rate: {location.hourlyRate} <br />
                             Available Parking Slots: {availableSlots} <br />
                           </DrawerDescription>
                         </DrawerHeader>
-                        <DrawerFooter>
+                        <DrawerFooter className="flex flex-row">
                           <DialogClose asChild>
                             <Link
                               className="m-auto"
                               href={`/editor/${location.latitude}/${location.longitude}`}
                             >
-                              <Button>Reserve Now!</Button>
+                              <Button className="bg-green-700 hover:bg-green-600">
+                                Reserve Now!
+                              </Button>
                             </Link>
+                          </DialogClose>
+                          <DialogClose asChild>
+                            <Button
+                              className="m-auto"
+                              onClick={() =>
+                                setShowDirections({
+                                  isVisible: !showDirections.isVisible,
+                                  latitude: location.latitude,
+                                  longitude: location.longitude,
+                                })
+                              }
+                            >
+                              {showDirections.isVisible
+                                ? "Close Directions"
+                                : "Get Directions"}
+                            </Button>
                           </DialogClose>
                         </DrawerFooter>
                       </div>
