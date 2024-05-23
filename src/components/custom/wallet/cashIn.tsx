@@ -17,8 +17,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { User } from "lucia";
 
-export default function CashIn({ owner }: UserProps) {
+export default function CashIn(user: User) {
   const router = useRouter();
   const [isClicked, setIsClicked] = useState<boolean>(false);
 
@@ -35,7 +36,7 @@ export default function CashIn({ owner }: UserProps) {
 
     formData.append("amount", data.amount.toString());
 
-    const result = await cashIn(formData, owner);
+    const result = await cashIn(formData, user);
 
     if (result) {
       if (result.success) {

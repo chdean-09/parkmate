@@ -93,7 +93,7 @@ export default function MapComponent({
                     zIndex={50}
                   >
                     <Image
-                      src="/marker.png"
+                      src="/yellow-marker.png"
                       alt="marker"
                       width={45}
                       height={45}
