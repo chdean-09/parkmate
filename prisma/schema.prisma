@@ -64,7 +64,7 @@ model ParkingSlot {
   x            Int
   y            Int
   occupied     Boolean         @default(false)
-  location     ParkingLocation @relation(fields: [locationId], references: [id])
+  location     ParkingLocation @relation(fields: [locationId], references: [id], onDelete: Cascade)
   locationId   Int
   occupiedUser User?           @relation(fields: [userId], references: [id])
   userId       String?

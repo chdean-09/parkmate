@@ -1,7 +1,6 @@
 import EditorForm from "@/components/custom/editorForm";
 import { validateRequest } from "@/lib/auth";
 import prisma from "@/lib/db";
-import { GridStackWidget } from "gridstack";
 import { redirect } from "next/navigation";
 
 export default async function Editor({
@@ -12,6 +11,8 @@ export default async function Editor({
   const { user } = await validateRequest();
   if (!user) {
     return redirect("/login");
+  } else if (user.role !== "ADMIN") {
+    return redirect("/home");
   }
 
   const latitude = Number(params.latitude);
@@ -27,8 +28,12 @@ export default async function Editor({
     },
   });
 
+  if (locationExists && locationExists.ownerId !== user.id) {
+    return redirect("/home");
+  }
+
   return (
-    <div className="h-screen flex flex-col items-center">
+    <div className="h-fit flex flex-col items-center py-3">
       {locationExists ? (
         <div className="text-2xl font-bold">Update Existing Parking Spot</div>
       ) : (
