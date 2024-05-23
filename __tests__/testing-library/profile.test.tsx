@@ -1,13 +1,7 @@
 import "@testing-library/jest-dom";
 import { render, screen, fireEvent } from "@testing-library/react";
-import DisplayProfile from "@/components/custom/profile/displayProfile"; // Adjust the import according to your file structure
-import { useRouter } from "next/router";
+import DisplayProfile from "@/components/custom/profile/displayProfile";
 import { User } from "lucia";
-
-// Mock the useRouter method from next/router
-jest.mock("next/router", () => ({
-  useRouter: jest.fn(),
-}));
 
 describe("Profile", () => {
   const mockUser = {
