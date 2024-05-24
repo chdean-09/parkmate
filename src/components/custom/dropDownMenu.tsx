@@ -32,7 +32,7 @@ const DropDownMenu = () => {
 
       <SheetContent>
         <SheetHeader>
-          <ul className="flex flex-col gap-3">
+          <ul className="flex flex-col gap-3 text-lg">
             <li>
               <SheetClose asChild>
                 <NavLink href="/home" active={pathname === "/home"}>
@@ -58,6 +58,13 @@ const DropDownMenu = () => {
               <SheetClose asChild>
                 <NavLink href="/profile" active={pathname === "/profile"}>
                   Profile
+                </NavLink>
+              </SheetClose>
+            </li>
+            <li>
+              <SheetClose asChild>
+                <NavLink href="/wallet" active={pathname === "/wallet"}>
+                  Wallet
                 </NavLink>
               </SheetClose>
             </li>

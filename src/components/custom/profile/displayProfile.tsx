@@ -1,10 +1,21 @@
+"use client"
+
 import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { getUser } from "@/actions/getUser";
+import { convertToPhPesoFormat } from "@/utils/convertToPhPesoFormat";
+import { User } from "lucia";
 
-async function DisplayProfile({ owner }: UserProps) {
+function DisplayProfile({ owner }: { owner?: User | undefined }) {
+  if (!owner) {
+    return (
+      <div className="w-full flex flex-col px-5 py-7">
+        <p className="text-white text-3xl">Loading...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col items-center justify-center">
       <div className="w-24 h-24 relative rounded-full border p-5 flex items-center justify-center my-8">
@@ -21,18 +32,22 @@ async function DisplayProfile({ owner }: UserProps) {
       <div className="w-full flex items-center justify-center my-7">
         <div className="flex gap-3 h-10 items-center">
           <div className="flex flex-col text-center">
-            <p className="font-bold text-xl">ownedLocations</p>
+            <p className="font-bold text-xl">Zero</p>
             <p className="text-blue-700">Owned</p>
           </div>
           {/* Hopefully can view currently reserved parking spot */}
           <Separator orientation="vertical" />
           <div className="flex flex-col text-center">
-            <p className="font-bold text-xl">occupiedSlots</p>
+            <p className="font-bold text-xl">
+              {owner.occupiedSlots === undefined ? "0" : owner.occupiedSlots.length}
+            </p>
             <p className="text-blue-700">Reserved</p>
           </div>
           <Separator orientation="vertical" />
           <div className="flex flex-col text-center">
-            <p className="font-bold text-xl">{owner.wallet}</p>
+            <p className="font-bold text-xl">
+              {convertToPhPesoFormat(owner.wallet)}
+            </p>
             <p className="text-blue-700">Balance</p>
           </div>
         </div>
@@ -40,18 +55,24 @@ async function DisplayProfile({ owner }: UserProps) {
       {/* Redirect Buttons */}
       <div className="w-full text-center">
         <Button asChild variant={"ghost"} className="w-full ">
-          <Link href="/reserved-spot"> View Owned Slot</Link>
+          <Link role="view-slot-link" href="/reserved-spot">
+            View Owned Slot
+          </Link>
         </Button>
         <Separator />
 
         {/* E-Wallet */}
         <Button asChild variant={"ghost"} className="w-full ">
-          <Link href="/wallet">₱ Wallet</Link>
+          <Link role="wallet-link" href="/wallet">
+            ₱ Wallet
+          </Link>
         </Button>
         <Separator />
 
         <Button asChild variant={"ghost"} className="w-full ">
-          <Link href="/cashin">Cash In</Link>
+          <Link role="cashin-link" href="/cashin">
+            Cash In
+          </Link>
         </Button>
       </div>
     </div>
