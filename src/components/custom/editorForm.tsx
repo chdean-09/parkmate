@@ -188,6 +188,7 @@ export default function EditorForm({
           render={({ field }) => (
             <FormItem className="w-full mb-6">
               <CustomParkingGrid
+                user={owner}
                 alreadyCreated={fetchedData ? true : false}
                 layout={field.value as (GridStackWidget & { id: string })[]}
                 setLayout={(newLayout) => {

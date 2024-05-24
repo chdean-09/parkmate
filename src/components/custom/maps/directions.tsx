@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
 import { useMapsLibrary, useMap } from "@vis.gl/react-google-maps";
 
 export default function Directions({
@@ -41,7 +40,7 @@ export default function Directions({
     if (!routesLibrary || !map) return;
 
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
+      navigator.geolocation.watchPosition(
         (position: GeolocationPosition) => {
           const pos = {
             lat: position.coords.latitude,
@@ -49,6 +48,7 @@ export default function Directions({
           };
 
           setMyLocation(pos);
+          console.log(pos, "new pos");
           setDirectionsService(new routesLibrary.DirectionsService());
           setDirectionsRenderer(new routesLibrary.DirectionsRenderer({ map }));
         },

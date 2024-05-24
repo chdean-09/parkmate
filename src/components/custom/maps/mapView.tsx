@@ -18,7 +18,6 @@ import {
 } from "@/components/ui/dialog";
 import {
   Drawer,
-  DrawerClose,
   DrawerContent,
   DrawerDescription,
   DrawerFooter,
@@ -34,6 +33,7 @@ import { ParkingLocation, ParkingSlot } from "@prisma/client";
 import { useToast } from "@/components/ui/use-toast";
 
 import Directions from "./directions";
+import { convertToPhPesoFormat } from "@/utils/convertToPhPesoFormat";
 
 const containerStyle: CSSProperties = {
   width: "100%",
@@ -82,8 +82,8 @@ export default function MapComponent({
     if (directionDetails) {
       toast({
         duration: 15000,
-        title: "Route Summary",
-        description: `Road: ${directionDetails.summary}, Distance: ${directionDetails.distance}, Duration: ${directionDetails.duration}`,
+        title: `${directionDetails.summary}`,
+        description: `Distance: ${directionDetails.distance}, Duration: ${directionDetails.duration}`,
       });
     }
   }, [directionDetails, toast]);
@@ -250,19 +250,21 @@ export default function MapComponent({
                           </DrawerTitle>
                           <DrawerDescription>
                             Owner: {location.owner.username} <br />
-                            Base Rate: {location.baseRate} <br />
-                            Hourly Rate: {location.hourlyRate} <br />
+                            Base Rate:{" "}
+                            {convertToPhPesoFormat(location.baseRate)} <br />
+                            Hourly Rate:{" "}
+                            {convertToPhPesoFormat(location.hourlyRate)} <br />
                             Available Parking Slots: {availableSlots} <br />
                           </DrawerDescription>
                         </DrawerHeader>
-                        {availableSlots === 0 && (
+                        {availableSlots === 0 && !occupiedByUser && (
                           <p className="text-sm text-red-500">
                             This location is currently full. Please check back
                             later.
                           </p>
                         )}
                         <DrawerFooter className="flex flex-row">
-                          {availableSlots > 0 ? (
+                          {availableSlots > 0 || occupiedByUser ? (
                             <>
                               <DialogClose asChild>
                                 <Link

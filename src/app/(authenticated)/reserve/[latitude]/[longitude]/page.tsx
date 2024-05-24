@@ -28,7 +28,7 @@ export default async function Reserve({
     },
   });
 
-  if (!locationExists) {
+  if (!locationExists || locationExists.ownerId === user.id) {
     return redirect("/home");
   }
 

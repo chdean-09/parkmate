@@ -1,19 +1,21 @@
 "use server";
 
 import prisma from "@/lib/db";
-import { ParkingSlot } from "@prisma/client";
 import { User } from "lucia";
+import { revalidatePath } from "next/cache";
 
 export async function reserveSlot(
-  slots: ParkingSlot[],
-  locationId: number,
+  slot: { locationId: number; id: string },
   name: string,
   baseRate: number,
   user: User,
-) {
+): Promise<{ message: string } | void> {
   try {
-    const cost = slots.length * baseRate;
+    if (user.wallet < baseRate) {
+      return { message: "Not enough wallet balance" };
+    }
 
+    // sets parking slot status to occupied
     await prisma.parkingSlot.updateMany({
       data: {
         occupiedAt: new Date(),
@@ -21,32 +23,49 @@ export async function reserveSlot(
         userId: user.id,
       },
       where: {
-        id: {
-          in: slots.map((slot) => slot.id),
-        },
-        locationId: locationId,
+        AND: [
+          {
+            id: slot.id,
+          },
+          {
+            locationId: slot.locationId,
+          },
+        ],
       },
     });
 
+    // creates a transaction for history keeping
     await prisma.transaction.create({
-      include: {
-        slot: true,
-      },
       data: {
-        name: name,
-        amount: user.wallet - cost,
+        name: `Slot reservation at ${name}`,
+        amount: -baseRate,
         userId: user.id,
       },
     });
 
-    return { success: true };
+    // updates user wallet amount
+    await prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        wallet: {
+          decrement: baseRate,
+        },
+      },
+    });
+
+    revalidatePath("/", "layout");
   } catch (error) {
     console.log(error);
-    return { success: false, message: `${error}` };
+    return { message: `${error}` };
   }
 }
 
-export async function leaveSlot(slots: ParkingSlot[], locationId: number) {
+export async function leaveSlot(
+  slot: { id: string },
+  locationId: number,
+): Promise<{ message: string } | void> {
   try {
     await prisma.parkingSlot.updateMany({
       data: {
@@ -55,16 +74,20 @@ export async function leaveSlot(slots: ParkingSlot[], locationId: number) {
         userId: null,
       },
       where: {
-        id: {
-          in: slots.map((slot) => slot.id),
-        },
-        locationId: locationId,
+        AND: [
+          {
+            id: slot.id,
+          },
+          {
+            locationId: locationId,
+          },
+        ],
       },
     });
 
-    return { success: true };
+    revalidatePath("/", "layout");
   } catch (error) {
     console.log(error);
-    return { success: false, message: `${error}` };
+    return { message: `${error}` };
   }
 }
