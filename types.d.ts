@@ -19,24 +19,14 @@ interface OwnedLocation {
   hourlyRate: number;
 }
 
-type UserProps = {
+type UserOwnerProps = {
   owner: {
     id: string;
     username: string;
-    ownedLocations: any ;
+    ownedLocations: any;
     occupiedSlots: any;
     transactions: any;
     wallet: number;
     role: string;
   };
 };
-
-
-interface TransactionProps {
-  id: number;
-  createdAt: Date;
-  name: string;
-  amount: number;
-  slotId: number | null;
-  userId: string;
-}

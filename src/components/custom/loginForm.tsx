@@ -71,7 +71,7 @@ export default function LogInForm(props: LoginFormProps) {
       >
         <h2 className="mb-4 text-xl text-wrap flex flex-col text-center ">
           Welcome To ParkMate! <br />{" "}
-          <span className="text-base"> Login to continue</span>
+          <span className="text-base">Login to continue</span>
         </h2>
         <FormField
           control={form.control}
@@ -122,15 +122,11 @@ export default function LogInForm(props: LoginFormProps) {
               </span>
             </div>
             Login
-          
           </Button>
         )}
         {/* not clicked */}
         {!isClicked && (
-          <Button
-            className={`w-full md:w-auto self-center`}
-            type="submit"
-          >
+          <Button className={`w-full md:w-auto self-center`} type="submit">
             {" "}
             Login
           </Button>

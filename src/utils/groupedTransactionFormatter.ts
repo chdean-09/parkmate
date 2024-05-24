@@ -1,47 +1,28 @@
-export default async function groupTransactionFormatter(transactions: TransactionProps[]) {
-  const groupedData = transactions.reduce<Record<string, Record<string, TransactionProps[]>>>(
-    (acc, transaction) => {
-      const dateObj = new Date(transaction.createdAt);
-      const year = dateObj.getFullYear().toString();
-      const months: string[] = [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ];
-      const month = months[dateObj.getMonth()];
-      const day = dateObj.getDate();
-      const formattedDate = `${month} ${day}`;
+import { Transaction } from "@prisma/client";
 
-      if (!acc[year]) {
-        acc[year] = {};
-      }
+type GroupedTransactions = {
+  [year: string]: {
+    [monthDay: string]: Transaction[];
+  };
+};
 
-      if (!acc[year][formattedDate]) {
-        acc[year][formattedDate] = [];
-      }
+const groupTransactionFormatter = (
+  transactions: Transaction[],
+): GroupedTransactions => {
+  return transactions.reduce((acc, transaction) => {
+    const date = new Date(transaction.createdAt);
+    const year = date.getFullYear().toString();
+    const month = date.toLocaleString("default", { month: "long" });
+    const day = date.getDate().toString().padStart(2, "0");
+    const monthDay = `${month} ${day}`;
 
-      acc[year][formattedDate].push({
-        id: transaction.id,
-        createdAt: transaction.createdAt,
-        name: transaction.name,
-        amount: transaction.amount,
-        slotId: transaction.slotId,
-        userId: transaction.userId,
-      });
+    if (!acc[year]) acc[year] = {};
+    if (!acc[year][monthDay]) acc[year][monthDay] = [];
 
-      return acc;
-    },
-    {}
-  );
+    acc[year][monthDay].push(transaction);
 
-  return groupedData
-}
+    return acc;
+  }, {} as GroupedTransactions);
+};
+
+export default groupTransactionFormatter;
