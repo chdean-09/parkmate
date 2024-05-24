@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
@@ -39,9 +39,7 @@ function DisplayProfile({ owner }: { owner?: User | undefined }) {
           <Separator orientation="vertical" />
           <div className="flex flex-col text-center">
             <p className="font-bold text-xl">
-              {owner.occupiedSlots === undefined
-                ? "0"
-                : owner.occupiedSlots.length}
+              {owner.occupiedSlots === undefined ? "0" : owner.occupiedSlots.length}
             </p>
             <p className="text-blue-700">Reserved</p>
           </div>

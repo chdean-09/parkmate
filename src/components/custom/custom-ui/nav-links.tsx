@@ -15,6 +15,16 @@ export function NavLinks() {
           </NavLink>
         </li>
         <li>
+          <NavLink href="/nearby" active={pathname === "/nearby"}>
+            Nearby
+          </NavLink>
+        </li>
+        <li>
+          <NavLink href="/maps" active={pathname === "/maps"}>
+            Maps
+          </NavLink>
+        </li>
+        <li>
           <NavLink href="/profile" active={pathname === "/profile"}>
             Profile
           </NavLink>

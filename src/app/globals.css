@@ -75,18 +75,18 @@
   text-align: center;
   border: 2px;
   border-color: white;
-  border-style: dotted solid dotted solid;
-  border-radius: 10px;
-}
-
-.grid-stack-item-content:hover {
-  cursor: pointer;
+  border-style: dotted solid none solid;
 }
 
 /* drop animation when creating a new parking location */
 .drop {
   animation: drop 0.3s linear forwards;
 }
+
+/* rotate parking slot */
+/* .rotated {
+  transform: rotate(90deg);
+} */
 
 @keyframes drop {
   0% {

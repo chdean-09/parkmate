@@ -8,6 +8,6 @@ const mockUser = {
   ownedLocations: [],
   occupiedSlots: [],
   transactions: [],
-} as User;
+} as User
 
 export default mockUser;

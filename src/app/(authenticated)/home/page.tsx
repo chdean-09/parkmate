@@ -14,9 +14,18 @@ export default async function Home() {
   }
 
   const fetchedMarkers = await prisma.parkingLocation.findMany({
-    include: {
-      parkingSlots: true,
-      owner: true,
+    select: {
+      latitude: true,
+      longitude: true,
+      ownerId: true,
+      parkingSlots: {
+        select: {
+          x: true,
+          y: true,
+          occupied: true,
+          userId: true,
+        },
+      },
     },
   });
 

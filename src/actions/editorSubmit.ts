@@ -1,5 +1,4 @@
 "use server";
-
 import prisma from "@/lib/db";
 import { Prisma, ParkingSlot } from "@prisma/client";
 import { User } from "lucia";

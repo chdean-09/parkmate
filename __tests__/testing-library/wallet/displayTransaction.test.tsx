@@ -21,7 +21,7 @@ describe("TransactionPage", () => {
           createdAt={new Date("2024-05-24T08:30:00Z")}
           slotId={12345}
           userId="67890"
-        />,
+        />
       );
     });
 
@@ -57,7 +57,7 @@ describe("TransactionPage", () => {
           createdAt={new Date("2024-05-24T08:30:00Z")}
           slotId={12345}
           userId="67890"
-        />,
+        />
       );
     });
 
@@ -81,7 +81,7 @@ describe("TransactionPage", () => {
           createdAt={new Date("2024-05-24T08:30:00Z")}
           slotId={12345}
           userId="67890"
-        />,
+        />
       );
     });
 

@@ -33,6 +33,7 @@ export function CustomMapControl({
                   };
 
                   onCurrentLocationSelect(pos);
+                  console.log(pos, "huli ka");
                 },
                 () => {
                   console.log("Error: The Geolocation service failed.");

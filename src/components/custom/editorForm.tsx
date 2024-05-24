@@ -54,15 +54,11 @@ export default function EditorForm({
     resolver: zodResolver(parkingFormSchema),
     defaultValues: {
       name: fetchedData?.name || "",
-      baseRate: fetchedData?.baseRate || undefined,
-      hourlyRate: fetchedData?.hourlyRate || undefined,
+      baseRate: fetchedData?.baseRate || 0,
+      hourlyRate: fetchedData?.hourlyRate || 0,
       gridLayout: gridLayout,
     },
   });
-
-  const baseRate = form.watch("baseRate");
-  const hourlyRate = form.watch("hourlyRate");
-  const grid = form.watch("gridLayout");
 
   async function handleSubmit(data: z.infer<typeof parkingFormSchema>) {
     const formData = new FormData();
@@ -154,6 +150,9 @@ export default function EditorForm({
                     className="col-span-3"
                     required
                     {...field}
+                    onChange={(event) => {
+                      field.onChange(parseInt(event.target.value));
+                    }}
                   />
                 </FormControl>
                 <FormMessage className="col-span-4 text-center" />
@@ -175,6 +174,9 @@ export default function EditorForm({
                     className="col-span-3"
                     required
                     {...field}
+                    onChange={(event) => {
+                      field.onChange(parseInt(event.target.value));
+                    }}
                   />
                 </FormControl>
                 <FormMessage className="col-span-4 text-center" />
@@ -188,7 +190,6 @@ export default function EditorForm({
           render={({ field }) => (
             <FormItem className="w-full mb-6">
               <CustomParkingGrid
-                user={owner}
                 alreadyCreated={fetchedData ? true : false}
                 layout={field.value as (GridStackWidget & { id: string })[]}
                 setLayout={(newLayout) => {
@@ -205,9 +206,7 @@ export default function EditorForm({
           <Button
             className="basis-[100%] bg-green-700 hover:bg-green-600"
             disabled={
-              baseRate <= 0 ||
-              hourlyRate <= 0 ||
-              (grid as GridStackWidget[]).length === 0 ||
+              (layout as GridStackWidget[]).length === 0 ||
               !form.formState.isDirty // disable if wala gn change valuess
             }
             type="submit"
