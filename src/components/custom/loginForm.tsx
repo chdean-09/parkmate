@@ -66,12 +66,15 @@ export default function LogInForm(props: LoginFormProps) {
   return (
     <Form {...form}>
       <form
+        id="login-form"
         onSubmit={form.handleSubmit(handleSubmit)}
         className="space-y-8 mb-3 flex flex-col"
       >
         <h2 className="mb-4 text-xl text-wrap flex flex-col text-center ">
-          Welcome To ParkMate! <br />{" "}
-          <span className="text-base">Login to continue</span>
+          <span id="login-greet">Welcome To ParkMate!</span>
+          <span id="login-continue-text" className="text-base">
+            Login to continue
+          </span>
         </h2>
         <FormField
           control={form.control}
@@ -80,7 +83,12 @@ export default function LogInForm(props: LoginFormProps) {
             <FormItem>
               <FormLabel>Username</FormLabel>
               <FormControl>
-                <Input placeholder="username" required {...field} />
+                <Input
+                  id="username-field"
+                  placeholder="username"
+                  required
+                  {...field}
+                />
               </FormControl>
 
               <FormMessage />
@@ -95,6 +103,7 @@ export default function LogInForm(props: LoginFormProps) {
               <FormLabel>Password</FormLabel>
               <FormControl>
                 <Input
+                  id="password-field"
                   placeholder="password"
                   required
                   type="password"
@@ -109,6 +118,7 @@ export default function LogInForm(props: LoginFormProps) {
         {/* clicked */}
         {isClicked && (
           <Button
+            id="login-btn-disabled"
             className={`flex gap-1 w-full md:w-auto self-center ${isClicked ? "disabled" : ""}`}
             disabled={isClicked}
             type="submit"
@@ -122,12 +132,12 @@ export default function LogInForm(props: LoginFormProps) {
               </span>
             </div>
             Login
-          
           </Button>
         )}
         {/* not clicked */}
         {!isClicked && (
           <Button
+            id="login-btn-active"
             className={`w-full md:w-auto self-center`}
             type="submit"
           >

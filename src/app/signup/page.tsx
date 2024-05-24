@@ -14,8 +14,8 @@ export default async function Signup() {
     <div className="p-5 flex flex-col h-screen items-center justify-center w-screen">
       <SignupForm signUp={signup} />
       <h1>
-        Already have an account?{" "}
-        <Link href="/login" className="underline">
+        <span id="login-bottom-text">Already have an account? </span>
+        <Link id="login-link" href="/login" className="underline">
           Log in now!
         </Link>
       </h1>
