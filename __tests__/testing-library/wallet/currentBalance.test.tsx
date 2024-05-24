@@ -20,23 +20,27 @@ describe("CurrentBalance Component", () => {
       render(<CurrentBalance owner={user} />);
 
       waitFor(() => {
-        expect(screen.queryByRole('heading', { level: 2, name: /Current Balance/i })).toBeInTheDocument();
+        expect(
+          screen.queryByRole("heading", { level: 2, name: /Current Balance/i }),
+        ).toBeInTheDocument();
         expect(screen.queryByText(formattedBalance)).toBeInTheDocument();
         expect(convertToPhPesoFormat).toHaveBeenCalledWith(user.wallet);
-      })
+      });
     });
-    
-    it('renders zero balance when owner has no money', async () => {
+
+    it("renders zero balance when owner has no money", async () => {
       (convertToPhPesoFormat as jest.Mock).mockReturnValue("₱0.00");
 
       render(<CurrentBalance owner={user} />);
 
       waitFor(() => {
-        expect(screen.queryByRole('heading', { level: 2, name: /Current Balance/i })).toBeInTheDocument();
+        expect(
+          screen.queryByRole("heading", { level: 2, name: /Current Balance/i }),
+        ).toBeInTheDocument();
         expect(screen.queryByText("₱0.00")).toBeInTheDocument();
         expect(convertToPhPesoFormat).toHaveBeenCalledWith("₱0.00");
-      })
-    })
+      });
+    });
   });
 
   describe("when owner is undefined", () => {
@@ -44,18 +48,20 @@ describe("CurrentBalance Component", () => {
 
     it("renders zero balance when owner's wallet is undefined", () => {
       waitFor(() => {
-        expect(screen.queryByRole('heading', { level: 2, name: /Current Balance/i })).toBeInTheDocument();
-        expect(screen.queryByText('Loading...')).toBeInTheDocument();
-   
-      })
+        expect(
+          screen.queryByRole("heading", { level: 2, name: /Current Balance/i }),
+        ).toBeInTheDocument();
+        expect(screen.queryByText("Loading...")).toBeInTheDocument();
+      });
     });
 
     it("renders correctly with the loading text", async () => {
       waitFor(() => {
-        expect(screen.queryByRole('heading', { level: 2, name: /Current Balance/i })).toBeInTheDocument();
+        expect(
+          screen.queryByRole("heading", { level: 2, name: /Current Balance/i }),
+        ).toBeInTheDocument();
         expect(screen.queryByText("Loading...")).toBeInTheDocument();
-      })
-
+      });
     });
   });
 });

@@ -16,7 +16,9 @@ export default function CurrentBalance({ owner }: { owner?: User }) {
     <div className="w-full flex flex-col px-5 py-7">
       <h2 className="text-sm uppercase text-white/50">Current Balance</h2>
       <p className="text-white text-3xl">
-        {owner.wallet !== undefined && owner.wallet >= 0 ? convertToPhPesoFormat(owner.wallet) : "₱0.00"}
+        {owner.wallet !== undefined && owner.wallet >= 0
+          ? convertToPhPesoFormat(owner.wallet)
+          : "₱0.00"}
       </p>
     </div>
   );
