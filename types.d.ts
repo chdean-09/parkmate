@@ -30,12 +30,3 @@ type UserOwnerProps = {
     role: string;
   };
 };
-
-
-interface TransactionProps {
-  createdAt: Date;
-  name: string;
-  amount: number;
-  slotId: number | null;
-  userId: string;
-}
