@@ -19,7 +19,7 @@ interface OwnedLocation {
   hourlyRate: number;
 }
 
-type UserProps = {
+type UserOwnerProps = {
   owner: {
     id: string;
     username: string;
