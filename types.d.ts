@@ -33,7 +33,6 @@ type UserOwnerProps = {
 
 
 interface TransactionProps {
-  id: number;
   createdAt: Date;
   name: string;
   amount: number;

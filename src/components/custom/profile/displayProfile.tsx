@@ -1,3 +1,5 @@
+"use client"
+
 import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
@@ -5,11 +7,15 @@ import Link from "next/link";
 import { convertToPhPesoFormat } from "@/utils/convertToPhPesoFormat";
 import { User } from "lucia";
 
-type UserTypes = {
-  owner: User;
-};
+function DisplayProfile({ owner }: { owner?: User | undefined }) {
+  if (!owner) {
+    return (
+      <div className="w-full flex flex-col px-5 py-7">
+        <p className="text-white text-3xl">Loading...</p>
+      </div>
+    );
+  }
 
-function DisplayProfile({ owner }: UserTypes) {
   return (
     <div className="flex flex-col items-center justify-center">
       <div className="w-24 h-24 relative rounded-full border p-5 flex items-center justify-center my-8">
@@ -33,7 +39,7 @@ function DisplayProfile({ owner }: UserTypes) {
           <Separator orientation="vertical" />
           <div className="flex flex-col text-center">
             <p className="font-bold text-xl">
-              {owner.occupiedSlots === undefined ? "No array" : 0}
+              {owner.occupiedSlots === undefined ? "0" : owner.occupiedSlots.length}
             </p>
             <p className="text-blue-700">Reserved</p>
           </div>
@@ -50,7 +56,6 @@ function DisplayProfile({ owner }: UserTypes) {
       <div className="w-full text-center">
         <Button asChild variant={"ghost"} className="w-full ">
           <Link role="view-slot-link" href="/reserved-spot">
-            {" "}
             View Owned Slot
           </Link>
         </Button>
