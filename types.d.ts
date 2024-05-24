@@ -23,7 +23,7 @@ type UserProps = {
   owner: {
     id: string;
     username: string;
-    ownedLocations: any ;
+    ownedLocations: any;
     occupiedSlots: any;
     transactions: any;
     wallet: number;
@@ -31,12 +31,11 @@ type UserProps = {
   };
 };
 
-
 interface TransactionProps {
   id: number;
-  createdAt: Date;
+  createdAt: Date | string;
   name: string;
   amount: number;
-  slotId: number | null;
+  slotId: string | null;
   userId: string;
 }
