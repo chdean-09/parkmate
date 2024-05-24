@@ -22,29 +22,21 @@ describe("Navigate log in page and sign up page", () => {
     await driver.get(rootURL);
   });
 
-  it(
-    "initializes the context",
-    async () => {
-      await driver.get(rootURL);
-    },
-    10000
-  );
+  it("initializes the context", async () => {
+    await driver.get(rootURL);
+  }, 10000);
 
-  it(
-    "Renders login page, have greetings and app name displayed",
-    async () => {
-      const headerEl = await getElementByXPath(
-        "/html/body/div/div/form/h2/span",
-        driver
-      );
+  it("Renders login page, have greetings and app name displayed", async () => {
+    const headerEl = await getElementByXPath(
+      "/html/body/div/div/form/h2/span",
+      driver,
+    );
 
-      const textHeader = await headerEl.getText();
-      const expectedHeaderText = "Login to continue";
+    const textHeader = await headerEl.getText();
+    const expectedHeaderText = "Login to continue";
 
-      expect(textHeader).toEqual(expectedHeaderText);
-    },
-    10000
-  );
+    expect(textHeader).toEqual(expectedHeaderText);
+  }, 10000);
 
   describe("Navigate to SignUp and back to Login", () => {
     let signUpLinkEl: WebElement;
@@ -53,73 +45,57 @@ describe("Navigate log in page and sign up page", () => {
       beforeEach(async () => {
         signUpLinkEl = await getElementByXPath(
           "/html/body/div/div/h1/a",
-          driver
+          driver,
         );
       });
 
-      it(
-        "must have sign up link",
-        async () => {
-          const signUpText = await signUpLinkEl.getText();
-          const expectedSignUpText = "Sign up now!";
+      it("must have sign up link", async () => {
+        const signUpText = await signUpLinkEl.getText();
+        const expectedSignUpText = "Sign up now!";
 
-          expect(signUpText).toEqual(expectedSignUpText);
-        },
-        10000
-      );
+        expect(signUpText).toEqual(expectedSignUpText);
+      }, 10000);
 
-      it(
-        "go to sign up and render the sign up page",
-        async () => {
-          await signUpLinkEl.click();
+      it("go to sign up and render the sign up page", async () => {
+        await signUpLinkEl.click();
 
-          const signUpUniqueEl = await getElementByXPath(
-            "/html/body/div/form/h2/span",
-            driver
-          );
-          const signUpHeaderText = await signUpUniqueEl.getText();
-          const expectedSignUpHeaderText = "Sign up to continue";
+        const signUpUniqueEl = await getElementByXPath(
+          "/html/body/div/form/h2/span",
+          driver,
+        );
+        const signUpHeaderText = await signUpUniqueEl.getText();
+        const expectedSignUpHeaderText = "Sign up to continue";
 
-          expect(signUpHeaderText).toEqual(expectedSignUpHeaderText);
-        },
-        10000
-      );
+        expect(signUpHeaderText).toEqual(expectedSignUpHeaderText);
+      }, 10000);
     });
 
     describe("Go back to log in page", () => {
-      it(
-        "go to login",
-        async () => {
-          const signUpLinkEl = await getElementByXPath(
-            "/html/body/div/div/h1/a",
-            driver
-          );
-      
-          const signUpLinkText = await signUpLinkEl.getText();
-          const expectedSignUpLinkText = "Sign up now!";
-      
-          expect(signUpLinkText).toEqual(expectedSignUpLinkText);
-      
-          await signUpLinkEl.click();
-        },
-        10000
-      );
+      it("go to login", async () => {
+        const signUpLinkEl = await getElementByXPath(
+          "/html/body/div/div/h1/a",
+          driver,
+        );
 
-      it(
-        "renders the log in page",
-        async () => {
-          const headerEl = await getElementByXPath(
-            "/html/body/div/div/form/h2/span",
-            driver
-          );
+        const signUpLinkText = await signUpLinkEl.getText();
+        const expectedSignUpLinkText = "Sign up now!";
 
-          const textHeader = await headerEl.getText();
-          const expectedHeaderText = "Login to continue";
+        expect(signUpLinkText).toEqual(expectedSignUpLinkText);
 
-          expect(textHeader).toEqual(expectedHeaderText);
-        },
-        10000
-      );
+        await signUpLinkEl.click();
+      }, 10000);
+
+      it("renders the log in page", async () => {
+        const headerEl = await getElementByXPath(
+          "/html/body/div/div/form/h2/span",
+          driver,
+        );
+
+        const textHeader = await headerEl.getText();
+        const expectedHeaderText = "Login to continue";
+
+        expect(textHeader).toEqual(expectedHeaderText);
+      }, 10000);
     });
 
     describe("Go back to Signup again", () => {
@@ -127,37 +103,29 @@ describe("Navigate log in page and sign up page", () => {
       beforeEach(async () => {
         signUpLinkEl = await getElementByXPath(
           "/html/body/div/div/h1/a",
-          driver
+          driver,
         );
       });
 
-      it(
-        "must have sign up link",
-        async () => {
-          const signUpText = await signUpLinkEl.getText();
-          const expectedSignUpText = "Sign up now!";
+      it("must have sign up link", async () => {
+        const signUpText = await signUpLinkEl.getText();
+        const expectedSignUpText = "Sign up now!";
 
-          expect(signUpText).toEqual(expectedSignUpText);
-        },
-        10000
-      );
+        expect(signUpText).toEqual(expectedSignUpText);
+      }, 10000);
 
-      it(
-        "go to sign up and render the sign up page",
-        async () => {
-          await signUpLinkEl.click();
+      it("go to sign up and render the sign up page", async () => {
+        await signUpLinkEl.click();
 
-          const signUpUniqueEl = await getElementByXPath(
-            "/html/body/div/form/h2/span",
-            driver
-          );
-          const signUpHeaderText = await signUpUniqueEl.getText();
-          const expectedSignUpHeaderText = "Sign up to continue";
+        const signUpUniqueEl = await getElementByXPath(
+          "/html/body/div/form/h2/span",
+          driver,
+        );
+        const signUpHeaderText = await signUpUniqueEl.getText();
+        const expectedSignUpHeaderText = "Sign up to continue";
 
-          expect(signUpHeaderText).toEqual(expectedSignUpHeaderText);
-        },
-        10000
-      );
+        expect(signUpHeaderText).toEqual(expectedSignUpHeaderText);
+      }, 10000);
     });
   });
 });

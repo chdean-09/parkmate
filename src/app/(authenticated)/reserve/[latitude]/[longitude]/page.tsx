@@ -1,11 +1,11 @@
-import EditorForm from "@/components/custom/editorForm";
-import { ChevronLeft } from "lucide-react";
 import { validateRequest } from "@/lib/auth";
 import prisma from "@/lib/db";
-import { redirect } from "next/navigation";
+import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import ReservationForm from "@/components/custom/reservationForm";
 
-export default async function Editor({
+export default async function Reserve({
   params,
 }: {
   params: { latitude: number; longitude: number };
@@ -13,8 +13,6 @@ export default async function Editor({
   const { user } = await validateRequest();
   if (!user) {
     return redirect("/login");
-  } else if (user.role !== "ADMIN") {
-    return redirect("/home");
   }
 
   const latitude = Number(params.latitude);
@@ -30,7 +28,7 @@ export default async function Editor({
     },
   });
 
-  if (locationExists && locationExists.ownerId !== user.id) {
+  if (!locationExists || locationExists.ownerId === user.id) {
     return redirect("/home");
   }
 
@@ -43,17 +41,9 @@ export default async function Editor({
         <h1 className="hidden sm:block ml-2 text-2xl font-bold">Go back</h1>
       </div>
 
-      {locationExists ? (
-        <div className="text-2xl font-bold">Update Existing Parking Spot</div>
-      ) : (
-        <div className="text-2xl font-bold">Create New Parking Spot</div>
-      )}
-      <EditorForm
-        owner={user}
-        latitude={latitude}
-        longitude={longitude}
-        fetchedData={locationExists}
-      />
+      <div className="text-2xl font-bold">Reserve Parking Spot</div>
+
+      <ReservationForm user={user} fetchedData={locationExists} />
     </div>
   );
 }

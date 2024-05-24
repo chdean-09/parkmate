@@ -3,7 +3,10 @@ import "selenium-webdriver/chrome";
 import "chromedriver";
 import "selenium-webdriver/firefox";
 import "geckodriver";
-import { getElementById, getElementByXPath } from "../../src/lib/selenium-utils";
+import {
+  getElementById,
+  getElementByXPath,
+} from "../../src/lib/selenium-utils";
 
 const rootURL = "http://localhost:3000/login";
 
@@ -22,42 +25,51 @@ describe("Login Page", () => {
   it("initializes the context", async () => {
     await driver.get(rootURL);
   }, 10000);
-  
-  it("Have greetings and app name displayed", async () => {
-    const headerEl = await getElementByXPath('/html/body/div/div/form/h2/span', driver)
 
-    const textHeader = await headerEl.getText()
-    const expectedHeaderText = 'Login to continue'
+  it("Have greetings and app name displayed", async () => {
+    const headerEl = await getElementByXPath(
+      "/html/body/div/div/form/h2/span",
+      driver,
+    );
+
+    const textHeader = await headerEl.getText();
+    const expectedHeaderText = "Login to continue";
 
     expect(textHeader).toEqual(expectedHeaderText);
-  })
+  });
 
-  it('must have sign up link', async () =>  {
-    const noAcctEl = await getElementByXPath('/html/body/div/div/h1/span', driver)
-    const signUpLinkEl = await getElementByXPath('/html/body/div/div/h1/a', driver)
+  it("must have sign up link", async () => {
+    const noAcctEl = await getElementByXPath(
+      "/html/body/div/div/h1/span",
+      driver,
+    );
+    const signUpLinkEl = await getElementByXPath(
+      "/html/body/div/div/h1/a",
+      driver,
+    );
 
-    const noAcctText = await noAcctEl.getText()
-    const expNoAcctText = 'No account?'
+    const noAcctText = await noAcctEl.getText();
+    const expNoAcctText = "No account?";
 
-    const signUpText = await signUpLinkEl.getText()
-    const expectedSignUpText = "Sign up now!"
-    
-    expect(noAcctText).toEqual(expNoAcctText)
-    expect(signUpText).toEqual(expectedSignUpText)
-  })
+    const signUpText = await signUpLinkEl.getText();
+    const expectedSignUpText = "Sign up now!";
+
+    expect(noAcctText).toEqual(expNoAcctText);
+    expect(signUpText).toEqual(expectedSignUpText);
+  });
 
   it("logs in the user after correct creds filled out", async () => {
     const usernameField = await getElementByXPath(
       '//*[@id=":R4puucq:-form-item"]',
-      driver
+      driver,
     );
     const passwordField = await getElementByXPath(
       '//*[@id=":R8puucq:-form-item"]',
-      driver
+      driver,
     );
     const loginButton = await getElementByXPath(
       `/html/body/div/div/form/button`,
-      driver
+      driver,
     );
 
     await usernameField.sendKeys("clyde123");
@@ -76,7 +88,7 @@ describe("Login Page", () => {
 
     const AppNameElement = await getElementByXPath(
       "/html/body/section/div/h1",
-      driver
+      driver,
     );
 
     const text = await AppNameElement.getText();

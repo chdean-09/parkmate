@@ -1,3 +1,5 @@
+import { GridStackNode } from "gridstack";
+
 interface ActionResult {
   error: string;
 }
@@ -23,10 +25,24 @@ type UserOwnerProps = {
   owner: {
     id: string;
     username: string;
-    ownedLocations: any ;
+    ownedLocations: any;
     occupiedSlots: any;
     transactions: any;
     wallet: number;
     role: string;
   };
 };
+
+interface TransactionProps {
+  id: number;
+  createdAt: Date;
+  name: string;
+  amount: number;
+  slotId: number | null;
+  userId: string;
+}
+
+interface GridStackNodeData extends GridStackNode {
+  occupied: boolean;
+  userId: string;
+}

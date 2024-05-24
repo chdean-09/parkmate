@@ -122,15 +122,11 @@ export default function LogInForm(props: LoginFormProps) {
               </span>
             </div>
             Login
-          
           </Button>
         )}
         {/* not clicked */}
         {!isClicked && (
-          <Button
-            className={`w-full md:w-auto self-center`}
-            type="submit"
-          >
+          <Button className={`w-full md:w-auto self-center`} type="submit">
             {" "}
             Login
           </Button>

@@ -26,7 +26,8 @@ export default async function TransactionHistory({ owner }: { owner?: User }) {
     return <h3>No Transaction History</h3>;
   }
 
-  const groupedTransactions: GroupedTransactions = groupTransactionFormatter(transactions);
+  const groupedTransactions: GroupedTransactions =
+    groupTransactionFormatter(transactions);
 
   return (
     <div className="p-5">
