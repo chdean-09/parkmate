@@ -2,7 +2,12 @@
 
 import "gridstack/dist/gridstack.min.css";
 import "gridstack/dist/gridstack-extra.min.css";
-import { GridStack, GridStackOptions, GridStackWidget } from "gridstack";
+import {
+  GridStack,
+  GridStackNode,
+  GridStackOptions,
+  GridStackWidget,
+} from "gridstack";
 import {
   Dialog,
   DialogClose,
@@ -18,10 +23,14 @@ import { getCellHeightForBreakpoint } from "@/utils/responsiveCellHeight";
 import { ParkingLocation, ParkingSlot } from "@prisma/client";
 import { User } from "lucia";
 import { leaveSlot, reserveSlot } from "@/actions/reserveSlot";
-import { GridStackNodeData } from "../../../types";
 import { useToast } from "@/components/ui/use-toast";
 import { convertToPhPesoFormat } from "@/utils/convertToPhPesoFormat";
 import { useRouter } from "next/navigation";
+
+interface GridStackNodeData extends GridStackNode {
+  occupied: boolean;
+  userId: string;
+}
 
 type ParkingGridProps = {
   user: User;
