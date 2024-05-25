@@ -6,13 +6,13 @@ Welcome to **ParkMate**, the final project submission by:
 - **Millan, Jeff Andre**
 - **Tejada, Ian Clyde**
 
-ParkMate simplifies your parking experience with a **user-friendly** app. Quickly **locate** available parking spots and **reserve** parking slots. Our app calculates **payments** based on the base rate and the hourly rate of its respective parking location. ParkMate provides a **transaction history**, making your payments convenient and organized.
+ParkMate simplifies your parking experience with a **user-friendly** app. Quickly **locate** available parking locations and **reserve** parking slots. Our app calculates **payments** based on the base rate and the hourly rate of its respective parking location. ParkMate provides a **transaction history**, making your payments convenient and organized.
 
 Say goodbye to parking hassles – ParkMate is your reliable companion for **stress-free** parking.
 
 ## Getting Started
 
-This is for developers wanting to reproduce the web app functionalities on your local machine. As much as possible, follow all the steps below in order.
+This is for developers wanting to reproduce the web app functionalities on their local machine. As much as possible, try to follow all the steps below in order.
 
 ## Install dependencies
 
@@ -42,7 +42,7 @@ npx prisma migrate dev
 
 ## Admin Credentials
 
-All users that sign up are regular users. Only the developers have the privilege to grant ADMIN access. For requirement purposes, we have provided a free account with admin access.
+All users that sign up will be REGULAR users. Only the developers have the privilege to grant ADMIN access. For requirement purposes, we have provided a free account with admin access.
 
 ```bash
 username: parkmate-admin
