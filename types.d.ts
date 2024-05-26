@@ -1,4 +1,4 @@
-import { GridStackNode } from "gridstack";
+
 
 interface ActionResult {
   error: string;
