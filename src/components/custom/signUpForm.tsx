@@ -59,6 +59,11 @@ export default function SignUp(props: SignUpFormProps) {
           type: "manual",
           message: result.error,
         });
+      } else if (result.error === "Username already exists") {
+        form.setError("username", {
+          type: "manual",
+          message: result.error,
+        });
       }
     }
     setIsClicked(false);
@@ -92,7 +97,7 @@ export default function SignUp(props: SignUpFormProps) {
                   {...field}
                 />
               </FormControl>
-              <FormMessage />
+              <FormMessage id="error-message"/>
             </FormItem>
           )}
         />
@@ -111,7 +116,7 @@ export default function SignUp(props: SignUpFormProps) {
                   {...field}
                 />
               </FormControl>
-              <FormMessage />
+              <FormMessage id="error-message"/>
             </FormItem>
           )}
         />

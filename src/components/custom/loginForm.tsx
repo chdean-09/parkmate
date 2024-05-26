@@ -91,7 +91,7 @@ export default function LogInForm(props: LoginFormProps) {
                 />
               </FormControl>
 
-              <FormMessage />
+              <FormMessage id="error-message"/>
             </FormItem>
           )}
         />{" "}
@@ -111,7 +111,7 @@ export default function LogInForm(props: LoginFormProps) {
                 />
               </FormControl>
 
-              <FormMessage />
+              <FormMessage id="error-message"/>
             </FormItem>
           )}
         />

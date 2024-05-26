@@ -47,19 +47,64 @@ describe("Login Page", () => {
     expect(signUpText).toEqual(expectedSignUpText);
   });
 
+  describe("User enters incorrect credentials", () => {
+    let usernameField: WebElement;
+    let passwordField: WebElement;
+    let loginButton: WebElement;
+
+    beforeAll(async () => {
+      usernameField = await getElementById("username-field", driver);
+      passwordField = await getElementById("password-field", driver);
+      loginButton = await getElementById("login-btn-active", driver);
+    });
+
+    afterEach(async () => {
+      await usernameField.clear();
+      await passwordField.clear();
+    });
+
+    it("doesn't log in the user after entering incorrect credentials", async () => {
+      await usernameField.sendKeys("seleniumtest-wrong");
+      const usernameText = await usernameField.getAttribute("value");
+      await passwordField.sendKeys("seleniumtestpassword-wrong");
+      const passwordText = await passwordField.getAttribute("value");
+
+      const expectedUsername = "seleniumtest-wrong";
+      expect(usernameText).toEqual(expectedUsername);
+      const expectedCreds = "seleniumtestpassword-wrong";
+      expect(passwordText).toEqual(expectedCreds);
+
+      await loginButton.click();
+
+      const errorElement = await getElementById("error-message", driver);
+      const errorText = await errorElement.getText();
+      const expectedErrorText = "Incorrect username or password";
+      expect(errorText).toEqual(expectedErrorText);
+    }, 10000);
+  });
+
+  describe('Correct Credentials Entered', () => {
+    loginUser();
+  })
+  
+
+  
+});
+
+function loginUser() {
   it("logs in the user after entering correct credentials", async () => {
     const usernameField = await getElementById("username-field", driver);
     const passwordField = await getElementById("password-field", driver);
     const loginButton = await getElementById("login-btn-active", driver);
 
-    await usernameField.sendKeys("clyde123");
+    await usernameField.sendKeys("seleniumtest");
     const usernameText = await usernameField.getAttribute("value");
-    await passwordField.sendKeys("12345678");
+    await passwordField.sendKeys("seleniumtestpassword");
     const passwordText = await passwordField.getAttribute("value");
 
-    const expectedUsername = "clyde123";
+    const expectedUsername = "seleniumtest";
     expect(usernameText).toEqual(expectedUsername);
-    const expectedCreds = "12345678";
+    const expectedCreds = "seleniumtestpassword";
     expect(passwordText).toEqual(expectedCreds);
 
     await loginButton.click();
@@ -70,4 +115,39 @@ describe("Login Page", () => {
     const expected = "Parkmate";
     expect(text).toEqual(expected);
   }, 10000);
-});
+}
+
+function signUpUser() {
+  it("signs up user after filling out form", async () => {
+    const usernameField = await getElementById("username-field", driver);
+    const passwordField = await getElementById("password-field", driver);
+    const signUpButton = await getElementById("signup-button-active", driver);
+
+    await usernameField.sendKeys("seleniumtest");
+    const usernameText = await usernameField.getAttribute("value");
+    await passwordField.sendKeys("seleniumtestpassword");
+    const passwordText = await passwordField.getAttribute("value");
+
+    const expectedUsername = "seleniumtest";
+    expect(usernameText).toEqual(expectedUsername);
+    const expectedPassword = "seleniumtestpassword";
+    expect(passwordText).toEqual(expectedPassword);
+
+    signUpButton.click();
+
+    const appNameElement = await getElementById("app-title", driver);
+    const text = await appNameElement.getText();
+
+    expect(text).toEqual("Parkmate");
+  }, 10000);
+
+  it("Log out user after signing up", async () => {
+    const appNameElement = await getElementById("app-title", driver);
+    const text = await appNameElement.getText();
+
+    expect(text).toEqual("Parkmate");
+
+    const logoutButton = await getElementById("logout-btn", driver);
+    logoutButton.click();
+  }, 10000);
+}
