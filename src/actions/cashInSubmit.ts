@@ -4,13 +4,11 @@ import { Prisma } from "@prisma/client";
 import { User } from "lucia";
 import { revalidatePath } from "next/cache";
 
-export async function cashIn(formData: FormData, owner: User | undefined) {
+export async function cashIn(amount: number, userId: string) {
   try {
-    if (!owner) {
+    if (!userId) {
       return { success: false, message: "User not found" };
     }
-
-    const amount = formData.get("amount");
 
     if (!amount || Number(amount) < 0 || Number(amount) > 100000) {
       return {
@@ -22,7 +20,7 @@ export async function cashIn(formData: FormData, owner: User | undefined) {
     // increment wallet
     await prisma.user.update({
       where: {
-        id: owner.id,
+        id: userId,
       },
       data: {
         wallet: {
@@ -35,7 +33,7 @@ export async function cashIn(formData: FormData, owner: User | undefined) {
     await prisma.transaction.create({
       data: {
         amount: Number(amount),
-        userId: owner.id,
+        userId: userId,
         name: "Cash In",
       },
     });
