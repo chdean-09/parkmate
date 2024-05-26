@@ -1,3 +1,5 @@
+
+
 interface ActionResult {
   error: string;
 }
@@ -37,5 +39,10 @@ interface TransactionProps {
   name: string;
   amount: number;
   slotId: number | null;
+  userId: string;
+}
+
+interface GridStackNodeData extends GridStackNode {
+  occupied: boolean;
   userId: string;
 }

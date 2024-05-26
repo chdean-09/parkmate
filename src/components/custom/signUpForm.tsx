@@ -59,20 +59,29 @@ export default function SignUp(props: SignUpFormProps) {
           type: "manual",
           message: result.error,
         });
+      } else if (result.error === "Username already exists") {
+        form.setError("username", {
+          type: "manual",
+          message: result.error,
+        });
       }
     }
     setIsClicked(false);
   }
-  
+
   return (
     <Form {...form}>
       <form
+        id="signup-form"
         onSubmit={form.handleSubmit(handleSubmit)}
         className="space-y-8 mb-3 flex flex-col"
       >
         <h2 className="mb-4 text-xl text-wrap flex flex-col text-center ">
-          Welcome To ParkMate! <br />{" "}
-          <span className="text-base"> Sign up to continue</span>
+          <span id="app-name-greet">Welcome To ParkMate! </span>
+          <span id="signup-text" className="text-base">
+            {" "}
+            Sign up to continue
+          </span>
         </h2>
         <FormField
           control={form.control}
@@ -81,9 +90,14 @@ export default function SignUp(props: SignUpFormProps) {
             <FormItem>
               <FormLabel>Username</FormLabel>
               <FormControl>
-                <Input placeholder="username" required {...field} />
+                <Input
+                  id="username-field"
+                  placeholder="username"
+                  required
+                  {...field}
+                />
               </FormControl>
-              <FormMessage />
+              <FormMessage id="error-message"/>
             </FormItem>
           )}
         />
@@ -95,19 +109,21 @@ export default function SignUp(props: SignUpFormProps) {
               <FormLabel>Password</FormLabel>
               <FormControl>
                 <Input
+                  id="password-field"
                   placeholder="password"
                   required
                   type="password"
                   {...field}
                 />
               </FormControl>
-              <FormMessage />
+              <FormMessage id="error-message"/>
             </FormItem>
           )}
         />
 
         {isClicked && (
           <Button
+            id="signup-button-disabled"
             className={`flex gap-1 w-full md:w-auto self-center ${isClicked ? "disabled" : ""}`}
             disabled={isClicked}
             type="submit"
@@ -125,7 +141,11 @@ export default function SignUp(props: SignUpFormProps) {
         )}
         {/* not clicked */}
         {!isClicked && (
-          <Button className={`w-full md:w-auto self-center`} type="submit">
+          <Button
+            id="signup-button-active"
+            className={`w-full md:w-auto self-center`}
+            type="submit"
+          >
             {" "}
             Sign up
           </Button>
