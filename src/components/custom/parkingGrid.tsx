@@ -12,8 +12,17 @@ import {
 import React, { useState, useEffect, useRef, createRef } from "react";
 import { Button } from "../ui/button";
 import { getCellHeightForBreakpoint } from "@/utils/responsiveCellHeight";
-import Image from "next/image";
-import { attachRotationListener } from "@/utils/rotateParkingSlot";
+import { ParkingLocation, ParkingSlot } from "@prisma/client";
+import { User } from "lucia";
+import { leaveSlot, reserveSlot } from "@/actions/reserveSlot";
+import { useToast } from "@/components/ui/use-toast";
+import { convertToPhPesoFormat } from "@/utils/convertToPhPesoFormat";
+import { useRouter } from "next/navigation";
+
+interface GridStackNodeData extends GridStackNode {
+  occupied: boolean;
+  userId: string;
+}
 
 type ParkingGridProps = {
   alreadyCreated: boolean;

@@ -30,3 +30,8 @@ type UserOwnerProps = {
     role: string;
   };
 };
+
+interface GridStackNodeData extends GridStackNode {
+  occupied: boolean;
+  userId: string;
+}
