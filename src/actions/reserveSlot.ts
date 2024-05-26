@@ -5,7 +5,7 @@ import { User } from "lucia";
 import { revalidatePath } from "next/cache";
 
 export async function reserveSlot(
-  slot: { locationId: number; id: string },
+  uniqueId: number,
   name: string,
   baseRate: number,
   user: User,
@@ -16,30 +16,24 @@ export async function reserveSlot(
     }
 
     // sets parking slot status to occupied
-    await prisma.parkingSlot.updateMany({
+    const reservedSlot = await prisma.parkingSlot.update({
+      where: {
+        unique_id: uniqueId,
+      },
       data: {
         occupiedAt: new Date(),
         occupied: true,
         userId: user.id,
-      },
-      where: {
-        AND: [
-          {
-            id: slot.id,
-          },
-          {
-            locationId: slot.locationId,
-          },
-        ],
       },
     });
 
     // creates a transaction for history keeping
     await prisma.transaction.create({
       data: {
-        name: `Slot reservation at ${name}`,
+        name: `Reserve slot #${reservedSlot.id} at ${name}`,
         amount: -baseRate,
         userId: user.id,
+        slotId: uniqueId,
       },
     });
 

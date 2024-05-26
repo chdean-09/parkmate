@@ -42,20 +42,6 @@ const DropDownMenu = () => {
             </li>
             <li>
               <SheetClose asChild>
-                <NavLink href="/nearby" active={pathname === "/nearby"}>
-                  Nearby
-                </NavLink>
-              </SheetClose>
-            </li>
-            <li>
-              <SheetClose asChild>
-                <NavLink href="/maps" active={pathname === "/maps"}>
-                  Maps
-                </NavLink>
-              </SheetClose>
-            </li>
-            <li>
-              <SheetClose asChild>
                 <NavLink href="/profile" active={pathname === "/profile"}>
                   Profile
                 </NavLink>
