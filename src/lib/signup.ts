@@ -20,11 +20,13 @@ export async function signup(formData: FormData): Promise<ActionResult> {
     },
   })
 
+  console.log("User: ", user)
+
   if (user) {
     console.log("User already exists");
 
     try {
-      await login(formData)
+      return await login(formData)
     } catch (error) {
       console.log("Error logging in user: ", error)
     }
