@@ -84,7 +84,7 @@ export default function CashIn({ owner }: { owner?: User }) {
                   <Input
                     className="w-full md:w-56"
                     id="amount"
-                    placeholder="username"
+                    placeholder="Enter amount"
                     required
                     {...field}
                   />
