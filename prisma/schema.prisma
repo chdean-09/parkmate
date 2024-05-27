@@ -69,7 +69,7 @@ model ParkingSlot {
   locationId   Int
   occupiedUser User?           @relation(fields: [userId], references: [id])
   userId       String?
-  Transaction  Transaction[]
+  transactions  Transaction[]
 
   @@map("parking_slots")
 }
