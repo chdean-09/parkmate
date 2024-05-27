@@ -90,7 +90,7 @@ function DisplayProfile({
       </div>
 
       <div
-        className={`grid ${owner.role === "ADMIN" ? "grid-cols-2" : "grid-cols-1"} gap-6 my-6`}
+        className={`grid ${owner.role === "ADMIN" ? "md:grid-cols-2" : "grid-cols-1"} gap-6 my-6`}
       >
         <Card className="w-[500px] h-fit">
           <CardHeader>
