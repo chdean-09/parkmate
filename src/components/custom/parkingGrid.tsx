@@ -26,10 +26,12 @@ import { leaveSlot, reserveSlot } from "@/actions/reserveSlot";
 import { useToast } from "@/components/ui/use-toast";
 import { convertToPhPesoFormat } from "@/utils/convertToPhPesoFormat";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface GridStackNodeData extends GridStackNode {
   occupied: boolean;
   userId: string;
+  unique_id: number;
 }
 
 type ParkingGridProps = {
@@ -50,7 +52,8 @@ export default forwardRef(function CustomParkingGrid(
     open: boolean;
     eligible: boolean;
     slotId: string;
-  }>({ open: false, eligible: false, slotId: "" });
+    unique_id: number;
+  }>({ open: false, eligible: false, slotId: "", unique_id: 0 });
   const [leavingDialog, setLeavingDialog] = useState<{
     open: boolean;
     slotId: string;
@@ -97,15 +100,10 @@ export default forwardRef(function CustomParkingGrid(
 
   // RESERVATION FUNCTIONS
   // reserve a slot
-  async function handleReserve(slotId: string) {
+  async function handleReserve(unique_id: number) {
     if (!data) return;
 
-    const result = await reserveSlot(
-      { locationId: data.id, id: slotId },
-      data.name,
-      data.baseRate,
-      user,
-    );
+    const result = await reserveSlot(unique_id, data.name, data.baseRate, user);
 
     if (result) {
       toast({
@@ -168,7 +166,10 @@ export default forwardRef(function CustomParkingGrid(
         contentElement.style.backgroundColor = "#2f9e17"; // green
 
         contentElement.addEventListener("click", () => {
-          setLeavingDialog({ open: true, slotId: slot.id! });
+          setLeavingDialog({
+            open: true,
+            slotId: slot.id!,
+          });
         });
       } else {
         // available slot
@@ -179,10 +180,20 @@ export default forwardRef(function CustomParkingGrid(
         contentElement.addEventListener("click", () => {
           if (data.baseRate > user.wallet) {
             // not eligible to reserve slot
-            setDialogData({ open: true, eligible: false, slotId: slot.id! });
+            setDialogData({
+              open: true,
+              eligible: false,
+              slotId: slot.id!,
+              unique_id: slot.unique_id,
+            });
           } else {
             // can reserve slot
-            setDialogData({ open: true, eligible: true, slotId: slot.id! });
+            setDialogData({
+              open: true,
+              eligible: true,
+              slotId: slot.id!,
+              unique_id: slot.unique_id,
+            });
           }
         });
       }
@@ -223,16 +234,29 @@ export default forwardRef(function CustomParkingGrid(
         ) as HTMLElement;
 
         contentElement.removeEventListener("click", () => {
-          setLeavingDialog({ open: true, slotId: slot.id! });
+          setLeavingDialog({
+            open: true,
+            slotId: slot.id!,
+          });
         });
 
         contentElement.removeEventListener("click", () => {
           if (data!.baseRate > user.wallet) {
             // not eligible to reserve slot
-            setDialogData({ open: true, eligible: false, slotId: slot.id! });
+            setDialogData({
+              open: true,
+              eligible: false,
+              slotId: slot.id!,
+              unique_id: slot.unique_id,
+            });
           } else {
             // can reserve slot
-            setDialogData({ open: true, eligible: true, slotId: slot.id! });
+            setDialogData({
+              open: true,
+              eligible: true,
+              slotId: slot.id!,
+              unique_id: slot.unique_id,
+            });
           }
         });
       });
@@ -252,6 +276,7 @@ export default forwardRef(function CustomParkingGrid(
             open: !dialogData.open,
             eligible: dialogData.eligible,
             slotId: "",
+            unique_id: 0,
           })
         }
       >
@@ -271,7 +296,7 @@ export default forwardRef(function CustomParkingGrid(
               <DialogFooter className="sm:justify-start">
                 <DialogClose asChild>
                   <Button
-                    onClick={async () => handleReserve(dialogData.slotId)}
+                    onClick={async () => handleReserve(dialogData.unique_id)}
                     type="button"
                     className="bg-green-700 hover:bg-green-600"
                   >
@@ -285,7 +310,12 @@ export default forwardRef(function CustomParkingGrid(
             <DialogHeader>
               <DialogTitle>Not enough balance!</DialogTitle>
               <DialogDescription>
-                You need to top up your wallet to reserve this slot.
+                You need to top up your wallet to reserve this slot. You can top
+                up by{" "}
+                <Link href={"/cashin"} className="underline font-semibold">
+                  {" "}
+                  cashing in{" "}
+                </Link>
               </DialogDescription>
             </DialogHeader>
           )}

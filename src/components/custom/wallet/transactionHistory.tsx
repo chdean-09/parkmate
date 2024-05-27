@@ -20,9 +20,12 @@ export default async function TransactionHistory({ owner }: { owner?: User }) {
     where: {
       userId: owner.id,
     },
+    orderBy: {
+      createdAt: "desc",
+    },
   });
 
-  if (!transactions || transactions.length === 0) {
+  if (transactions.length === 0) {
     return <h3>No Transaction History</h3>;
   }
 
