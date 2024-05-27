@@ -40,7 +40,6 @@ export async function cashIn(amount: number, userId: string) {
 
     revalidatePath("/", "layout");
     revalidatePath("/wallet", "page");
-    revalidatePath("/wallet/[userId]", "page");
 
     return { success: true };
   } catch (error) {
