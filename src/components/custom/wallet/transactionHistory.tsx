@@ -3,6 +3,7 @@ import TransactionPage from "./transactions";
 import { User } from "lucia";
 import groupTransactionFormatter from "@/utils/groupedTransactionFormatter";
 import { Transaction } from "@prisma/client";
+import prisma from "@/lib/db";
 
 type GroupedTransactions = {
   [year: string]: {
@@ -15,23 +16,22 @@ export default async function TransactionHistory({ owner }: { owner?: User }) {
     return <h3>Loading...</h3>;
   }
 
-  console.log(owner.id)
+  console.log(owner.id);
 
-  const response = await fetch(`${process.env.URL}/api/wallet/${owner.id}`);
-  
-  if (!response.ok) {
-    throw new Error("Failed to fetch transaction history");
-  }
+  const transactions: Transaction[] = await prisma.transaction.findMany({
+    where: {
+      userId: owner.id,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
 
-  const transactionJson = await response.json();
-
-  console.log(transactionJson)
-
-  if (!transactionJson || !Array.isArray(transactionJson.transactionHistory)) {
+  if (transactions.length === 0 || !Array.isArray(transactions)) {
     return <h3>No Transaction History</h3>;
   }
 
-  const transactions: Transaction[] = transactionJson.transactionHistory;
+  console.log(transactions);
 
   if (!transactions.length) {
     return <h3>No Transaction History</h3>;
@@ -51,11 +51,7 @@ export default async function TransactionHistory({ owner }: { owner?: User }) {
             <div key={monthDay} className="mb-6">
               <h2 className="text-xl font-semibold mb-3">{monthDay}</h2>
               {transactions
-                .sort(
-                  (a, b) =>
-                    new Date(b.createdAt).getTime() -
-                    new Date(a.createdAt).getTime()
-                )
+                .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
                 .map((transaction) => (
                   <TransactionPage
                     key={transaction.id}
