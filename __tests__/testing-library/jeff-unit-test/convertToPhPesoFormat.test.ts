@@ -18,7 +18,7 @@ describe("convertToPhPesoFormat", () => {
   });
 
   it("should handle NaN gracefully", () => {
-    expect(convertToPhPesoFormat(NaN)).toBe("₱NaN");
+    expect(convertToPhPesoFormat(NaN)).toBe("₱0.00");
   });
 
   it("should handle Infinity gracefully", () => {
