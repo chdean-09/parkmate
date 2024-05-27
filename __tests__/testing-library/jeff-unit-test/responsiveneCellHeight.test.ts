@@ -88,13 +88,11 @@ describe("getCellHeightForBreakpoint", () => {
     expect(result3).toBe(getCellHeightForBreakpoint(width3));
   });
 
-  // Special cases potentially overlooked
   test("verifies zero and one-off calculations", () => {
-    expect(getCellHeightForBreakpoint(0)).toBe(70); // Test exactly at 0
-    expect(getCellHeightForBreakpoint(1)).toBe(70); // Test close to 0
+    expect(getCellHeightForBreakpoint(0)).toBe(70);
+    expect(getCellHeightForBreakpoint(1)).toBe(70);
   });
 });
-// Additional edge cases
 test.each([
   [10000, 220],
   [100000, 220],
@@ -147,9 +145,7 @@ test.each([
   },
 );
 
-// Additional failed cases
 test("verifies consistency over multiple calls", () => {
-  // Test consistency for different window widths
   const width1 = 550;
   const width2 = 800;
   const width3 = 1000;
@@ -157,7 +153,6 @@ test("verifies consistency over multiple calls", () => {
   const result2 = getCellHeightForBreakpoint(width2);
   const result3 = getCellHeightForBreakpoint(width3);
 
-  // Check if results are consistent
   expect(result1).toBe(100);
   expect(result2).toBe(140);
   expect(result3).toBe(180);
@@ -166,14 +161,11 @@ test("verifies consistency over multiple calls", () => {
   expect(result3).toBe(getCellHeightForBreakpoint(width3));
 });
 
-// Additional scenarios
 test("verifies zero and one-off calculations", () => {
-  // Test for exact and near zero window widths
-  expect(getCellHeightForBreakpoint(0)).toBe(70); // Test exactly at 0
-  expect(getCellHeightForBreakpoint(1)).toBe(70); // Test close to 0
+  expect(getCellHeightForBreakpoint(0)).toBe(70);
+  expect(getCellHeightForBreakpoint(1)).toBe(70);
 });
 
-// Additional special cases potentially overlooked
 test.each([
   [500.01, 100],
   [700.01, 140],
