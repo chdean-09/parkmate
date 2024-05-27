@@ -17,20 +17,21 @@ export async function submitLocation(formData: FormData, owner: User) {
     const latitude = formData.get("latitude");
     const longitude = formData.get("longitude");
 
-    await prisma.parkingLocation.create({
-      data: {
-        ownerId: owner.id,
-        name: name as string,
-        baseRate: Number(baseRate),
-        hourlyRate: Number(hourlyRate),
-        latitude: Number(latitude),
-        longitude: Number(longitude),
-        parkingSlots: {
-          createMany: {
-            data: gridLayout,
-          },
-        },
+    await fetch(`${process.env.URL}/api/parking-location`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
+      body: JSON.stringify({
+        owner,
+        ownerId: owner.id,
+        name,
+        baseRate,
+        hourlyRate,
+        latitude,
+        longitude,
+        gridLayout,
+      }),
     });
 
     revalidatePath("/", "layout");
@@ -60,16 +61,18 @@ export async function updateLocation(formData: FormData) {
     const latitude = formData.get("latitude");
     const longitude = formData.get("longitude");
 
-    await prisma.parkingLocation.updateMany({
-      where: {
-        latitude: Number(latitude),
-        longitude: Number(longitude),
+    await fetch(`${process.env.URL}/api/parking-location`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
       },
-      data: {
-        name: name as string,
-        baseRate: Number(baseRate),
-        hourlyRate: Number(hourlyRate),
-      },
+      body: JSON.stringify({
+        name,
+        baseRate,
+        hourlyRate,
+        latitude,
+        longitude,
+      }),
     });
 
     revalidatePath("/", "layout");
@@ -93,11 +96,15 @@ export async function updateLocation(formData: FormData) {
 
 export async function deleteLocation(latitude: number, longitude: number) {
   try {
-    await prisma.parkingLocation.deleteMany({
-      where: {
-        latitude: latitude,
-        longitude: longitude,
+    await fetch(`${process.env.URL}/api/parking-location`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
       },
+      body: JSON.stringify({
+        latitude,
+        longitude,
+      }),
     });
 
     revalidatePath("/", "layout");
