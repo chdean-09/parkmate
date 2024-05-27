@@ -7,7 +7,9 @@ import { NavLinks } from "./custom-ui/nav-links";
 async function Header() {
   return (
     <div className="flex justify-between items-center mb-3 p-3 border-b shadow-sm">
-      <h1 className="text-3xl font-semibold">Parkmate</h1>
+      <h1 id="app-title" className="text-3xl font-semibold">
+        Parkmate
+      </h1>
       <div className="md:hidden flex items-center">
         <DropDownMenu />
       </div>

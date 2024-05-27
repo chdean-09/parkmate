@@ -19,7 +19,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { User } from "lucia";
 
-export default function CashIn({ owner }: { owner: User }) {
+export default function CashIn({ owner }: { owner?: User }) {
   const router = useRouter();
   const [isClicked, setIsClicked] = useState<boolean>(false);
 
@@ -29,6 +29,15 @@ export default function CashIn({ owner }: { owner: User }) {
       amount: 0,
     },
   });
+
+  if (!owner) {
+    return (
+      <div className="w-full flex flex-col px-5 py-7">
+        <h2 className="text-sm uppercase text-white/50">Cash In</h2>
+        <p className="text-white text-3xl">Loading...</p>
+      </div>
+    );
+  }
 
   async function handleSubmit(data: z.infer<typeof cashInFormSchema>) {
     setIsClicked(true);

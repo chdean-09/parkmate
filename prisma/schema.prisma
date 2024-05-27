@@ -63,12 +63,13 @@ model ParkingSlot {
   content      String
   x            Int
   y            Int
+  occupiedAt   DateTime?
   occupied     Boolean         @default(false)
   location     ParkingLocation @relation(fields: [locationId], references: [id], onDelete: Cascade)
   locationId   Int
   occupiedUser User?           @relation(fields: [userId], references: [id])
   userId       String?
-  Transaction  Transaction[]
+  transactions  Transaction[]
 
   @@map("parking_slots")
 }

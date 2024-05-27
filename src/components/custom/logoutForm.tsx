@@ -5,7 +5,11 @@ import { logout } from "@/lib/logout";
 
 export default function LogoutForm() {
   return (
-    <Button variant={"destructive"} onClick={async () => await logout()}>
+    <Button
+      id="logout-btn"
+      variant={"destructive"}
+      onClick={async () => await logout()}
+    >
       Sign out
     </Button>
   );

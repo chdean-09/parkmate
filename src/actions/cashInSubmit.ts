@@ -4,8 +4,12 @@ import { Prisma } from "@prisma/client";
 import { User } from "lucia";
 import { revalidatePath } from "next/cache";
 
-export async function cashIn(formData: FormData, owner: User) {
+export async function cashIn(formData: FormData, owner: User | undefined) {
   try {
+    if (!owner) {
+      return { success: false, message: "User not found" };
+    }
+
     const amount = formData.get("amount");
 
     if (!amount || Number(amount) < 0 || Number(amount) > 100000) {
@@ -15,15 +19,15 @@ export async function cashIn(formData: FormData, owner: User) {
       };
     }
 
-    const newBalance = Number(amount) + owner.wallet;
-
-    // update wallet
+    // increment wallet
     await prisma.user.update({
       where: {
         id: owner.id,
       },
       data: {
-        wallet: Number(newBalance),
+        wallet: {
+          increment: Number(amount),
+        },
       },
     });
 

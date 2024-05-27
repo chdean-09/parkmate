@@ -4,12 +4,36 @@ import { cookies } from "next/headers";
 import { lucia } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { generateIdFromEntropySize } from "lucia";
+import { login } from "./login";
 
 export async function signup(formData: FormData): Promise<ActionResult> {
   "use server";
   const username = formData.get("username");
-  // username must be between 3 ~ 31 characters, and only consists of lowercase letters, 0-9, -, and _
+  const password = formData.get("password");
+
+  // username must be between 3 ~ 31 characters, and only consists of letters, 0-9, -, and _
   // keep in mind some database (e.g. mysql) are case insensitive
+
+  const user = await prisma.user.findUnique({
+    where: {
+      username: username as string,
+    },
+  });
+
+  if (user) {
+    console.log("User already exists");
+
+    try {
+      await login(formData);
+    } catch (error) {
+      console.log("Error logging in user: ", error);
+    }
+
+    return {
+      error: "Username already exists",
+    };
+  }
+
   if (
     typeof username !== "string" ||
     username.length < 3 ||
@@ -20,7 +44,6 @@ export async function signup(formData: FormData): Promise<ActionResult> {
       error: "Invalid username",
     };
   }
-  const password = formData.get("password");
   if (
     typeof password !== "string" ||
     password.length < 6 ||
