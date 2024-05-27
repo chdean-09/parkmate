@@ -30,9 +30,6 @@ export const lucia = new Lucia(adapter, {
       username: attributes.username,
       wallet: Number(attributes.wallet),
       role: attributes.role,
-      ownedLocations: attributes.ownedLocations,
-      occupiedSlots: attributes.occupiedSlots,
-      transactions: attributes.transactions,
     };
   },
 });
@@ -48,9 +45,6 @@ interface DatabaseUserAttributes {
   username: string;
   role: "REGULAR" | "ADMIN";
   wallet: number;
-  transactions: Transaction[];
-  ownedLocations: ParkingLocation[];
-  occupiedSlots: ParkingSlot[];
 }
 
 export const validateRequest = cache(

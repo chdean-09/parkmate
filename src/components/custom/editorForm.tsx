@@ -212,11 +212,13 @@ export default function EditorForm({
             }
             type="submit"
           >
-            Submit
+            Confirm Edit
           </Button>
         </div>
       </form>
+
       {fetchedData && (
+        // can only delete if the location exists
         <Dialog>
           <DialogTrigger asChild>
             <Button variant={"destructive"} className="w-full max-w-80">

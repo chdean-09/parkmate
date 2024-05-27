@@ -26,6 +26,7 @@ import { leaveSlot, reserveSlot } from "@/actions/reserveSlot";
 import { useToast } from "@/components/ui/use-toast";
 import { convertToPhPesoFormat } from "@/utils/convertToPhPesoFormat";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface GridStackNodeData extends GridStackNode {
   occupied: boolean;
@@ -309,7 +310,12 @@ export default forwardRef(function CustomParkingGrid(
             <DialogHeader>
               <DialogTitle>Not enough balance!</DialogTitle>
               <DialogDescription>
-                You need to top up your wallet to reserve this slot.
+                You need to top up your wallet to reserve this slot. You can top
+                up by{" "}
+                <Link href={"/cashin"} className="underline font-semibold">
+                  {" "}
+                  cashing in{" "}
+                </Link>
               </DialogDescription>
             </DialogHeader>
           )}
