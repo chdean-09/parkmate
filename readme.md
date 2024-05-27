@@ -8,7 +8,7 @@ Welcome to **ParkMate**, the final project submission by:
 
 ParkMate simplifies your parking experience with a **user-friendly** app. Quickly **locate** available parking locations and **reserve** parking slots. Our app calculates **payments** based on the base rate and the hourly rate of its respective parking location. ParkMate provides a **transaction history**, making your payments convenient and organized.
 
-Say goodbye to parking hassles – ParkMate is your reliable companion for **stress-free** parking.
+Say goodbye to parking hassles – ParkMate is your reliable companion for **stress-free** parking
 
 ## Getting Started
 
