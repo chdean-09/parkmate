@@ -1,68 +1,95 @@
 import React from "react";
-import "@testing-library/jest-dom";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import CurrentBalance from "@/components/custom/wallet/currentBalance";
+import { render, screen } from "@testing-library/react";
+import TransactionPage from "@/components/custom/wallet/transactions";
 import { convertToPhPesoFormat } from "@/utils/convertToPhPesoFormat";
-import mockUser from "../../../__mocks__/user";
+import { formatTimeToHMS } from "@/utils/timeFormatter";
 
-jest.mock("./../../../src/utils/convertToPhPesoFormat", () => ({
-  convertToPhPesoFormat: jest.fn(),
-}));
+jest.mock("./../../../src/utils/convertToPhPesoFormat");
+jest.mock("./../../../src/utils/timeFormatter");
 
-describe("CurrentBalance Component", () => {
-  const user = mockUser;
+describe("TransactionPage", () => {
+  describe("test positive numbers", () => {
+    beforeEach(() => {
+      (convertToPhPesoFormat as jest.Mock).mockReturnValue("₱1,000.00");
+      (formatTimeToHMS as jest.Mock).mockReturnValue("08:30:00");
 
-  describe("when owner is logged in", () => {
-    it("renders correctly with the formatted balance", async () => {
-      const formattedBalance = "₱1,339.00";
-      (convertToPhPesoFormat as jest.Mock).mockReturnValue(formattedBalance);
-
-      render(<CurrentBalance owner={user} />);
-
-      waitFor(() => {
-        expect(
-          screen.queryByRole("heading", { level: 2, name: /Current Balance/i }),
-        ).toBeInTheDocument();
-        expect(screen.queryByText(formattedBalance)).toBeInTheDocument();
-        expect(convertToPhPesoFormat).toHaveBeenCalledWith(user.wallet);
-      });
+      render(
+        <TransactionPage
+          id={123}
+          name="Transaction Name"
+          amount={1000}
+          createdAt={new Date("2024-05-24T08:30:00Z")}
+          slotId={12345}
+          userId="67890"
+        />,
+      );
     });
 
-    it("renders zero balance when owner has no money", async () => {
-      (convertToPhPesoFormat as jest.Mock).mockReturnValue("₱0.00");
+    it("renders positive amount with green color and + sign", () => {
+      const amountElement = screen.getByText("+₱1,000.00");
+      expect(amountElement).toHaveTextContent("+₱1,000.00");
+    });
 
-      render(<CurrentBalance owner={user} />);
+    it("renders transaction details correctly", () => {
+      expect(screen.getByText("Transaction Name")).toBeInTheDocument();
 
-      waitFor(() => {
-        expect(
-          screen.queryByRole("heading", { level: 2, name: /Current Balance/i }),
-        ).toBeInTheDocument();
-        expect(screen.queryByText("₱0.00")).toBeInTheDocument();
-        expect(convertToPhPesoFormat).toHaveBeenCalledWith("₱0.00");
-      });
+      expect(screen.getByText("08:30:00")).toBeInTheDocument();
+      expect(screen.getByText("+₱1,000.00")).toBeInTheDocument();
+    });
+
+    it("renders positive amount with green color and + sign", () => {
+      const amountElement = screen.getByText("+₱1,000.00");
+      expect(amountElement).toHaveTextContent("+₱1,000.00");
+      expect(screen.getByText("08:30:00")).toBeInTheDocument();
     });
   });
 
-  describe("when owner is undefined", () => {
-    render(<CurrentBalance owner={undefined} />);
+  describe("test negative numbers", () => {
+    beforeEach(() => {
+      (convertToPhPesoFormat as jest.Mock).mockReturnValue("-₱500.00");
+      (formatTimeToHMS as jest.Mock).mockReturnValue("08:30:00");
 
-    it("renders zero balance when owner's wallet is undefined", () => {
-      waitFor(() => {
-        expect(
-          screen.queryByRole("heading", { level: 2, name: /Current Balance/i }),
-        ).toBeInTheDocument();
-        expect(screen.queryByText("Loading...")).toBeInTheDocument();
-      });
+      render(
+        <TransactionPage
+          id={123}
+          name="Transaction Name"
+          amount={-500}
+          createdAt={new Date("2024-05-24T08:30:00Z")}
+          slotId={12345}
+          userId="67890"
+        />,
+      );
     });
 
-    it("renders correctly with the loading text", async () => {
-      waitFor(() => {
-        expect(
-          screen.queryByRole("heading", { level: 2, name: /Current Balance/i }),
-        ).toBeInTheDocument();
-        expect(screen.queryByText("Loading...")).toBeInTheDocument();
-      });
+    it("renders negative amount with red color and - sign", () => {
+      const amountElement = screen.getByText("-₱500.00");
+      expect(amountElement).toHaveTextContent("-₱500.00");
+      expect(screen.getByText("08:30:00")).toBeInTheDocument();
+    });
+  });
+
+  describe("test zero number", () => {
+    beforeEach(() => {
+      (convertToPhPesoFormat as jest.Mock).mockReturnValue("₱0.00");
+      (formatTimeToHMS as jest.Mock).mockReturnValue("08:30:00");
+
+      render(
+        <TransactionPage
+          id={123}
+          name="Transaction Name"
+          amount={0}
+          createdAt={new Date("2024-05-24T08:30:00Z")}
+          slotId={12345}
+          userId="67890"
+        />,
+      );
+    });
+
+    it("renders 0 with green color and +", () => {
+      const amountElement = screen.getByText("₱0.00");
+
+      expect(amountElement).toHaveTextContent("₱0.00");
+      expect(screen.getByText("08:30:00")).toBeInTheDocument();
     });
   });
 });
-// console.log(renderedComponent.debug());

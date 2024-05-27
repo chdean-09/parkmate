@@ -1,5 +1,6 @@
 import prisma from "@/lib/db";
 import { Transaction } from "@prisma/client";
+import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
 export async function GET(

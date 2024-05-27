@@ -1,41 +1,17 @@
-import { until, By, WebDriver, WebElement } from "selenium-webdriver";
+import { until, By, WebDriver, WebElement } from 'selenium-webdriver';
 
-const waitUntilTime = 10 * 1000; // milliseconds
+const waitTimeout= 30000;
 
-export async function getElementById(
-  id: string,
-  driver: WebDriver
-): Promise<WebElement> {
-  try {
-    const el = await driver.wait(
+export async function getElementById(id: string, driver: WebDriver): Promise<WebElement> {
+    return await driver.wait(
       until.elementLocated(By.id(id)),
-      waitUntilTime
-    );
-    await driver.wait(until.elementIsVisible(el), waitUntilTime);
-
-    return el as WebElement;
-  } catch (error: any) {
-    throw new Error(
-      `Error locating element with ID "${id}": ${error.message}`
-    ) as Error;
+     waitTimeout
+    ).then((element) => driver.wait(until.elementIsVisible(element), waitTimeout));
   }
-}
-
-export async function getElementByXPath(
-  xpath: string,
-  driver: WebDriver
-): Promise<WebElement> {
-  try {
-    const el = await driver.wait(
+  
+  export async function getElementByXPath(xpath: string, driver: WebDriver): Promise<WebElement> {
+    return await driver.wait(
       until.elementLocated(By.xpath(xpath)),
-      waitUntilTime
-    );
-    await driver.wait(until.elementIsVisible(el), waitUntilTime);
-
-    return el as WebElement;
-  } catch (error: any) {
-    throw new Error(
-      `Error locating element with XPath "${xpath}": ${error.message}`
-    ) as Error;
+      waitTimeout
+    ).then((element) => driver.wait(until.elementIsVisible(element), waitTimeout));
   }
-}

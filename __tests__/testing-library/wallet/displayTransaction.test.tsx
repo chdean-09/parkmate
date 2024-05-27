@@ -4,8 +4,8 @@ import TransactionPage from "@/components/custom/wallet/transactions";
 import { convertToPhPesoFormat } from "@/utils/convertToPhPesoFormat";
 import { formatTimeToHMS } from "@/utils/timeFormatter";
 
-jest.mock("./../../../src/utils/convertToPhPesoFormat");
-jest.mock("./../../../src/utils/timeFormatter");
+jest.mock("../../../src/utils/convertToPhPesoFormat");
+jest.mock("../../../src/utils/timeFormatter");
 
 describe("TransactionPage", () => {
   describe("test positive numbers", () => {
