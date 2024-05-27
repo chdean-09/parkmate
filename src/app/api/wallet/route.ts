@@ -1,26 +1,6 @@
 import { cashIn } from "@/actions/cashInSubmit";
 import { NextResponse } from "next/server";
 
-// export async function GET(request: Request) {
-//   const { userId } = await request.json();
-
-//   try {
-//     const res = await getCash(userId);
-
-//     console.log("Wallet", res);
-
-//     return NextResponse.json({ res }, { status: 200 });
-//   } catch (error) {
-//     console.error("Error fetching wallet:", error);
-//     return NextResponse.json(
-//       {
-//         message: "An error occurred while fetching the wallet",
-//       },
-//       { status: 500 }
-//     );
-//   }
-// }
-
 export async function POST(request: Request) {
   try {
     const { userId, amount } = await request.json();
@@ -39,8 +19,6 @@ export async function POST(request: Request) {
     }
 
     const res = await cashIn(amount, userId);
-
-    console.log("Wallet", res);
 
     return NextResponse.json({ success: res.success }, { status: 200 });
   } catch (error) {

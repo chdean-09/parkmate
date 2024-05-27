@@ -5,9 +5,7 @@ const mockUser = {
   username: "clyde123",
   wallet: 1339,
   role: "REGULAR",
-  ownedLocations: [],
-  occupiedSlots: [],
-  transactions: [],
-} as User;
+
+} as User
 
 export default mockUser;

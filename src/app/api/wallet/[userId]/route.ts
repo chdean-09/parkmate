@@ -9,17 +9,23 @@ export async function GET(
   const { userId } = params;
 
   try {
-    const userWallet: Transaction[] = await prisma.transaction.findMany({
+    const transactionData: Transaction[] = await prisma.transaction.findMany({
       where: {
         userId: userId,
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
 
-    if (!userWallet) {
+    if (!transactionData) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
 
-    return NextResponse.json({ wallet: userWallet }, { status: 200 });
+    return NextResponse.json(
+      { transactionHistory: transactionData },
+      { status: 200 }
+    );
   } catch (error) {
     console.error("Error fetching wallet:", error);
     return NextResponse.json(

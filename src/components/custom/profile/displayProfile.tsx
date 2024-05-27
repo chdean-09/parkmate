@@ -21,10 +21,18 @@ function DisplayProfile({
   createdLocations,
   slotsReserved,
 }: {
-  owner: User;
+  owner: User | undefined;
   createdLocations: (ParkingLocation & { parkingSlots: ParkingSlot[] })[];
   slotsReserved: (ParkingSlot & { location: ParkingLocation })[];
 }) {
+  if (!owner) {
+    return (
+      <div className="w-full flex flex-col px-5 py-7">
+        <p className="text-white text-3xl">Loading...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col items-center justify-center">
       <div className="w-24 h-24 relative rounded-full border p-5 flex items-center justify-center my-8">
