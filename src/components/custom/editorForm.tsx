@@ -212,7 +212,7 @@ export default function EditorForm({
             }
             type="submit"
           >
-            Confirm Edit
+            {fetchedData ? "Confirm Update" : "Create"}
           </Button>
         </div>
       </form>

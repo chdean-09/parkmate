@@ -2,8 +2,6 @@ import prisma from "@/lib/db";
 import MapComponent from "@/components/custom/maps/mapView";
 import { validateRequest } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import { ParkingLocation } from "@prisma/client";
-import { Http2ServerRequest } from "http2";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;

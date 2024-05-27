@@ -15,38 +15,17 @@ export async function reserveSlot(
       return { message: "Not enough wallet balance" };
     }
 
-    // sets parking slot status to occupied
-    const reservedSlot = await prisma.parkingSlot.update({
-      where: {
-        unique_id: uniqueId,
+    await fetch(`${process.env.URL}/api/slot/reserve`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
-      data: {
-        occupiedAt: new Date(),
-        occupied: true,
-        userId: user.id,
-      },
-    });
-
-    // creates a transaction for history keeping
-    await prisma.transaction.create({
-      data: {
-        name: `Reserve slot #${reservedSlot.id} at ${name}`,
-        amount: -baseRate,
-        userId: user.id,
-        slotId: uniqueId,
-      },
-    });
-
-    // updates user wallet amount
-    await prisma.user.update({
-      where: {
-        id: user.id,
-      },
-      data: {
-        wallet: {
-          decrement: baseRate,
-        },
-      },
+      body: JSON.stringify({
+        uniqueId,
+        name,
+        baseRate,
+        user,
+      }),
     });
 
     revalidatePath("/", "layout");
@@ -61,22 +40,15 @@ export async function leaveSlot(
   locationId: number,
 ): Promise<{ message: string } | void> {
   try {
-    await prisma.parkingSlot.updateMany({
-      data: {
-        occupiedAt: null,
-        occupied: false,
-        userId: null,
+    await fetch(`${process.env.URL}/api/slot/leave`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
-      where: {
-        AND: [
-          {
-            id: slot.id,
-          },
-          {
-            locationId: locationId,
-          },
-        ],
-      },
+      body: JSON.stringify({
+        slot,
+        locationId,
+      }),
     });
 
     revalidatePath("/", "layout");
