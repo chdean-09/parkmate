@@ -7,7 +7,6 @@ import {
   getElementById,
   getElementByXPath,
 } from "../../../src/lib/selenium-utils";
-import { after } from "node:test";
 
 const rootURL = "http://localhost:3000/signup";
 
@@ -161,7 +160,7 @@ describe("Sign up page", () => {
       expect(text).toEqual("Parkmate");
 
       const logoutButton = await getElementById("logout-btn", driver);
-      logoutButton.click();
+      await logoutButton.click();
     }, 10000);
   });
 });

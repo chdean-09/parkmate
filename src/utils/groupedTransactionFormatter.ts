@@ -9,7 +9,15 @@ type GroupedTransactions = {
 const groupTransactionFormatter = (
   transactions: Transaction[],
 ): GroupedTransactions => {
-  return transactions.reduce((acc, transaction) => {
+
+  const transactionsWithDateObjects: Transaction[] = transactions.map(
+    (transaction: Transaction) => ({
+      ...transaction,
+      createdAt: new Date(transaction.createdAt),
+    })
+  );
+
+  return transactionsWithDateObjects.reduce((acc, transaction) => {
     const date = new Date(transaction.createdAt);
     const year = date.getFullYear().toString();
     const month = date.toLocaleString("default", { month: "long" });
