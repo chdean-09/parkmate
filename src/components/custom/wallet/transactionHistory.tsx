@@ -16,19 +16,16 @@ export default async function TransactionHistory({ owner }: { owner?: User }) {
     return <h3>Loading...</h3>;
   }
 
-  // const transactions: Transaction[] = await prisma.transaction.findMany({
-  //   where: {
-  //     userId: owner.id,
-  //   },
-  // });
+  const transactions: Transaction[] = await prisma.transaction.findMany({
+    where: {
+      userId: owner.id,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
 
-  const transactionJson = await fetch(
-    `${process.env.NEXT_PUBLIC_URL}/api/wallet/${owner.id}`
-  ).then((res) => res.json());
-
-  const transactions: Transaction[] = transactionJson.wallet;
-
-  if (!transactions || transactions.length === 0) {
+  if (transactions.length === 0) {
     return <h3>No Transaction History</h3>;
   }
 
