@@ -41,11 +41,17 @@ export default function CashIn({ owner }: { owner?: User }) {
 
   async function handleSubmit(data: z.infer<typeof cashInFormSchema>) {
     setIsClicked(true);
-    const formData = new FormData();
 
-    formData.append("amount", data.amount.toString());
+    if (!owner) return console.error("Owner not found");
 
-    const result = await cashIn(formData, owner);
+    const { amount } = data;
+
+    const result = await fetch(`/api/wallet`, {
+      method: "POST",
+      body: JSON.stringify({ amount, userId: owner.id}),
+    }).then((res) => res.json());
+
+    console.log("Result", result);
 
     if (result) {
       if (result.success) {
@@ -57,6 +63,7 @@ export default function CashIn({ owner }: { owner?: User }) {
         });
       }
     }
+
     setIsClicked(false);
   }
 

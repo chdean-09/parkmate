@@ -7,7 +7,6 @@ type Props = {}
 
 export default async function CashInPage({}: Props) {
  
-
   const { user } = await validateRequest();
 
   if (!user) {

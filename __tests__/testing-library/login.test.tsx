@@ -7,8 +7,9 @@ describe("LogInForm", () => {
     (formData: FormData) =>
       Promise.resolve({
         success: true,
-      }) as unknown as Promise<ActionResult | void>,
+      }) as unknown as Promise<ActionResult | void>
   );
+
   const formData = new FormData();
   formData.append("username", "test-username");
   formData.append("password", "test-password");
@@ -30,7 +31,7 @@ describe("LogInForm", () => {
 
   it("displays an error message on invalid username on login", async () => {
     const mockLoginWithError = jest.fn(() =>
-      Promise.resolve({ error: "Invalid username" }),
+      Promise.resolve({ error: "Invalid username" })
     );
     render(<LogInForm login={mockLoginWithError} />);
     const usernameInput = screen.getByPlaceholderText("username");
@@ -45,13 +46,13 @@ describe("LogInForm", () => {
     fireEvent.click(submitButton);
 
     await waitFor(() =>
-      expect(screen.getByText("Invalid username")).toBeInTheDocument(),
+      expect(screen.getByText("Invalid username")).toBeInTheDocument()
     );
   });
 
   it("displays an error message on invalid password on login", async () => {
     const mockLoginWithError = jest.fn(() =>
-      Promise.resolve({ error: "Invalid password" }),
+      Promise.resolve({ error: "Invalid password" })
     );
     render(<LogInForm login={mockLoginWithError} />);
     const usernameInput = screen.getByPlaceholderText("username");
@@ -66,13 +67,13 @@ describe("LogInForm", () => {
     fireEvent.click(submitButton);
 
     await waitFor(() =>
-      expect(screen.getByText("Invalid password")).toBeInTheDocument(),
+      expect(screen.getByText("Invalid password")).toBeInTheDocument()
     );
   });
 
   it("displays an error message on invalid password on login", async () => {
     const mockLoginWithError = jest.fn(() =>
-      Promise.resolve({ error: "Incorrect username or password" }),
+      Promise.resolve({ error: "Incorrect username or password" })
     );
     render(<LogInForm login={mockLoginWithError} />);
     const usernameInput = screen.getByPlaceholderText("username");
@@ -90,8 +91,8 @@ describe("LogInForm", () => {
 
     await waitFor(() =>
       expect(
-        screen.getByText("Incorrect username or password"),
-      ).toBeInTheDocument(),
+        screen.getByText("Incorrect username or password")
+      ).toBeInTheDocument()
     );
   });
 });

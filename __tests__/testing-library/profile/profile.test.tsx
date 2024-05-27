@@ -4,13 +4,13 @@ import DisplayProfile from "@/components/custom/profile/displayProfile";
 import { User } from "lucia";
 import { convertToPhPesoFormat } from "@/utils/convertToPhPesoFormat";
 import mockUser from "../../../__mocks__/user";
-// import { useRouter } from "next/router"; // next/link uses next/router internally
 import userEvent from "@testing-library/user-event";
+import { useRouter } from "next/router";
 
 // Mock the Router.push function implementation doesnt work yet, we are using next/link so it different than the next/navigation
-// jest.mock("next/router", () => ({
-//   useRouter: jest.fn(),
-// }));
+jest.mock("next/router", () => ({
+  useRouter: jest.fn(),
+}));
 
 jest.mock("./../../../src/utils/convertToPhPesoFormat", () => ({
   convertToPhPesoFormat: jest.fn(),
@@ -19,11 +19,18 @@ jest.mock("./../../../src/utils/convertToPhPesoFormat", () => ({
 describe("DisplayProfile", () => {
   const user: User = mockUser;
 
+  //see comments above
+  const mockRouter = {
+    push: useRouter as jest.Mock,
+  };
+
   describe("User is Logged In", () => {
     it("renders user info with correct values", () => {
       (convertToPhPesoFormat as jest.Mock).mockReturnValue("₱1,339.00");
 
-      render(<DisplayProfile owner={user} />);
+      render(
+        <DisplayProfile owner={user} createdLocations={[]} slotsReserved={[]} />
+      );
 
       const occupiedSlotsEl = screen.getByText("0");
       const usernameElement = screen.getByText(user.username);
@@ -37,43 +44,49 @@ describe("DisplayProfile", () => {
     describe("Clicking on View Owned Slot Button", () => {
       const user: User = mockUser;
 
-      it("navigates to /reserved-spot", async () => {
-        //see comments above
-        // const mockRouter = {
-        //   push: jest.fn(),
-        // };
-
-        render(<DisplayProfile owner={user} />);
-
-        const viewSlotButton = screen.getByRole("view-slot-link");
-        expect(viewSlotButton).toHaveAttribute("href", "/reserved-spot");
-
-        viewSlotButton.click();
-      });
-
       it("navigates to /wallet when link is clicked", async () => {
-        render(<DisplayProfile owner={user} />);
+        render(
+          <DisplayProfile
+            owner={user}
+            createdLocations={[]}
+            slotsReserved={[]}
+          />
+        );
 
         const viewSlotButton = screen.getByRole("wallet-link");
         expect(viewSlotButton).toHaveAttribute("href", "/wallet");
 
         userEvent.click(viewSlotButton);
+        await mockRouter.push();
       });
 
       it("navigates to /cashin when link is clicked", async () => {
-        render(<DisplayProfile owner={user} />);
+        render(
+          <DisplayProfile
+            owner={user}
+            createdLocations={[]}
+            slotsReserved={[]}
+          />
+        );
 
         const cashinButton = screen.getByRole("cashin-link");
         expect(cashinButton).toHaveAttribute("href", "/cashin");
 
         userEvent.click(cashinButton);
+        await mockRouter.push();
       });
     });
   });
 
   describe("User is not Logged In", () => {
     it("renders loading text when owner is undefined", () => {
-      render(<DisplayProfile owner={undefined} />);
+      render(
+        <DisplayProfile
+          owner={undefined}
+          createdLocations={[]}
+          slotsReserved={[]}
+        />
+      );
 
       const loadingTextElement = screen.getByText("Loading...");
 

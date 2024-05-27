@@ -16,14 +16,8 @@ export async function GET(
     }
 
     const { hashedPassword, ...userWithoutPassword } = user;
-
-    console.log("Userpass", userWithoutPassword);
-    console.log("userWithoutPassword", userWithoutPassword);
-
-    return NextResponse.json(
-      { message: "User found", data: userWithoutPassword },
-      { status: 200 }
-    );
+    
+    return NextResponse.json({ data: userWithoutPassword }, { status: 200 });
   } catch (error) {
     console.error("Error deleting user:", error);
     return NextResponse.json(
@@ -35,12 +29,10 @@ export async function GET(
   }
 }
 
-export async function DELETE(
-  request: Request,
-  { params }: { params: { userId: string } }
-) {
+export async function DELETE(request: Request) {
   try {
-    const { userId } = params;
+    const url = new URL(request.url).searchParams;
+    const userId: string = url.get("userId") || "0";
 
     const user = await prisma.user.delete({
       where: { id: userId },
